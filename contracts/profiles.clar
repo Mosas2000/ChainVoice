@@ -136,3 +136,23 @@
     (ok true)
   )
 )
+
+(define-read-only (get-profile (user principal))
+  (map-get? profiles { user: user })
+)
+
+(define-read-only (get-user-stats (user principal))
+  (map-get? user-stats { user: user })
+)
+
+(define-read-only (is-following (follower principal) (following principal))
+  (is-some (map-get? follows { follower: follower, following: following }))
+)
+
+(define-read-only (get-total-users)
+  (ok (var-get total-users))
+)
+
+(define-read-only (get-follow-info (follower principal) (following principal))
+  (map-get? follows { follower: follower, following: following })
+)
