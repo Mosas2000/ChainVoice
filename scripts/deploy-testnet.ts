@@ -1,17 +1,20 @@
 import { makeContractDeploy, broadcastTransaction, AnchorMode } from '@stacks/transactions';
 import { StacksTestnet } from '@stacks/network';
 import { readFileSync } from 'fs';
-import * as dotenv from 'dotenv';
+import { parse } from '@iarna/toml';
 
-dotenv.config({ path: '.env.testnet' });
+const configPath = 'settings/Testnet.toml';
+const configFile = readFileSync(configPath, 'utf-8');
+const config: any = parse(configFile);
 
 const network = new StacksTestnet();
+network.coreApiUrl = config.network.node_url;
 
 async function deployContract(contractName: string, contractPath: string) {
-  const deployerKey = process.env.DEPLOYER_KEY;
+  const deployerKey = config.deployer.private_key;
   
-  if (!deployerKey) {
-    console.error('DEPLOYER_KEY not found in .env.testnet');
+  if (!deployerKey || deployerKey === 'your_testnet_private_key_here') {
+    console.error('DEPLOYER_KEY not configured in settings/Testnet.toml');
     process.exit(1);
   }
 
@@ -44,13 +47,16 @@ async function deployContract(contractName: string, contractPath: string) {
 
 async function deployAll() {
   console.log('Starting testnet deployment...\n');
+  console.log(`Network: ${config.network.name}`);
+  console.log(`Node URL: ${config.network.node_url}\n`);
   
-  await deployContract('profiles', 'contracts/profiles.clar');
+  await deployContract(config.contracts.profiles, 'contracts/profiles.clar');
   
-  console.log('\nWaiting 30 seconds before deploying messages contract...');
-  await new Promise(resolve => setTimeout(resolve, 30000));
+  const delay = config.deployment.delay_between_contracts;
+  console.log(`\nWaiting ${delay / 1000} seconds before deploying messages contract...`);
+  await new Promise(resolve => setTimeout(resolve, delay));
   
-  await deployContract('messages', 'contracts/messages.clar');
+  await deployContract(config.contracts.messages, 'contracts/messages.clar');
   
   console.log('\nAll contracts deployed to testnet successfully!');
 }

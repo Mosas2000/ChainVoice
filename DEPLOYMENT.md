@@ -10,13 +10,13 @@
 ### 1. Setup Environment
 ```bash
 npm install
-cp .env.testnet.example .env.testnet
 ```
 
-### 2. Configure Private Key
-Edit .env.testnet and add your testnet private key:
-```
-DEPLOYER_KEY=your_testnet_private_key
+### 2. Configure Settings
+Edit `settings/Testnet.toml` and add your testnet private key:
+```toml
+[deployer]
+private_key = "your_testnet_private_key"
 ```
 
 Get testnet STX from faucet: https://explorer.hiro.so/sandbox/faucet
@@ -33,7 +33,7 @@ npm run deploy:testnet
 
 This will deploy both contracts:
 1. profiles.clar
-2. messages.clar (after 30 second delay)
+2. messages.clar (after configured delay)
 
 ### 5. Verify Deployment
 Check transactions on testnet explorer:
@@ -42,14 +42,16 @@ https://explorer.hiro.so/?chain=testnet
 ## Mainnet Deployment
 
 ### 1. Setup Environment
+Ensure you have run:
 ```bash
-cp .env.mainnet.example .env.mainnet
+npm install
 ```
 
-### 2. Configure Private Key
-Edit .env.mainnet and add your mainnet private key:
-```
-DEPLOYER_KEY=your_mainnet_private_key
+### 2. Configure Settings
+Edit `settings/Mainnet.toml` and add your mainnet private key:
+```toml
+[deployer]
+private_key = "your_mainnet_private_key"
 ```
 
 Ensure wallet has sufficient STX for deployment fees.
@@ -90,7 +92,7 @@ Mainnet:
 
 ## Troubleshooting
 
-### Deployment Fails
+### Deployment Fails in settings/Testnet.toml or settings/Mainnet.toml
 - Check STX balance
 - Verify private key format
 - Check network connectivity
