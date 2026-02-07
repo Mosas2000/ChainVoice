@@ -1,0 +1,10 @@
+node_modules
+.env
+.env.testnet
+.env.mainnet
+dist
+coverage
+.DS_Store
+settings/Devnet.toml
+settings/Testnet.toml
+settings/Mainnet.toml
