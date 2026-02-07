@@ -2,6 +2,7 @@ import { makeContractDeploy, broadcastTransaction, AnchorMode } from '@stacks/tr
 import { StacksTestnet } from '@stacks/network';
 import { readFileSync } from 'fs';
 import { parse } from '@iarna/toml';
+import { generateWallet, getStxAddress } from '@stacks/wallet-sdk';
 
 const configPath = 'settings/Testnet.toml';
 const configFile = readFileSync(configPath, 'utf-8');
@@ -10,13 +11,36 @@ const config: any = parse(configFile);
 const network = new StacksTestnet();
 network.coreApiUrl = config.network.node_url;
 
-async function deployContract(contractName: string, contractPath: string) {
-  const deployerKey = config.deployer.private_key;
+function getDeployerKey(): string {
+  // Check if mnemonic is provided
+  if (config.deployer.mnemonic && config.deployer.mnemonic !== 'your twelve or twenty four word mnemonic phrase here') {
+    const accountIndex = config.deployer.account_index || 0;
+    const wallet = generateWallet({
+      secretKey: config.deployer.mnemonic,
+      password: '',
+    });
+    const account = wallet.accounts[accountIndex];
+    console.log(`Using mnemonic (account ${accountIndex})`);
+    console.log(`Address: ${getStxAddress({ account, network })}\n`);
+    return account.stxPrivateKey;
+  }
   
-  if (!deployerKey || deployerKey === 'your_testnet_private_key_here') {
-    console.error('DEPLOYER_KEY not configured in settings/Testnet.toml');
+  // Fall back to private key
+  const privateKey = config.deployer.private_key;
+  if (!privateKey || privateKey === 'your_testnet_private_key_here') {
+    console.error('No valid deployer credentials found in settings/Testnet.toml');
+    console.error('Please provide either:');
+    console.error('  - private_key, or');
+    console.error('  - mnemonic (and optionally account_index)');
     process.exit(1);
   }
+  
+  return privateKey;
+}
+
+const deployerKey = getDeployerKey();
+
+async function deployContract(contractName: string, contractPath: string) {
 
   const contractCode = readFileSync(contractPath, 'utf-8');
   
