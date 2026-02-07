@@ -42,3 +42,27 @@
     (ok message-id)
   )
 )
+
+(define-public (send-direct-message (recipient principal) (content (string-utf8 500)))
+  (let
+    (
+      (message-id (var-get message-counter))
+    )
+    (asserts! (> (len content) u0) ERR-INVALID-INPUT)
+    (asserts! (not (is-eq tx-sender recipient)) ERR-INVALID-INPUT)
+    
+    (map-set messages
+      { message-id: message-id }
+      {
+        author: tx-sender,
+        content: content,
+        created-at: block-height,
+        is-public: false,
+        recipient: (some recipient)
+      }
+    )
+    
+    (var-set message-counter (+ message-id u1))
+    (ok message-id)
+  )
+)
