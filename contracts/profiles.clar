@@ -18,6 +18,11 @@
   }
 )
 
+(define-map follows
+  { follower: principal, following: principal }
+  { followed-at: uint }
+)
+
 (define-data-var total-users uint u0)
 
 (define-constant ERR-NOT-FOUND (err u404))
@@ -25,13 +30,17 @@
 (define-constant ERR-UNAUTHORIZED (err u403))
 (define-constant ERR-INVALID-INPUT (err u400))
 
+(define-private (is-valid-username (username (string-ascii 50)))
+  (and (> (len username) u0) (<= (len username) u50))
+)
+
 (define-public (create-profile (username (string-ascii 50)) (bio (string-ascii 500)) (avatar-url (string-ascii 200)))
   (let
     (
       (existing-profile (map-get? profiles { user: tx-sender }))
     )
     (asserts! (is-none existing-profile) ERR-ALREADY-EXISTS)
-    (asserts! (> (len username) u0) ERR-INVALID-INPUT)
+    (asserts! (is-valid-username username) ERR-INVALID-INPUT)
     
     (map-set profiles
       { user: tx-sender }
@@ -63,7 +72,7 @@
     (
       (profile (unwrap! (map-get? profiles { user: tx-sender }) ERR-NOT-FOUND))
     )
-    (asserts! (> (len username) u0) ERR-INVALID-INPUT)
+    (asserts! (is-valid-username username) ERR-INVALID-INPUT)
     
     (map-set profiles
       { user: tx-sender }
