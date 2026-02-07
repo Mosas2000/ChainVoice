@@ -19,13 +19,18 @@
 (define-constant ERR-NOT-FOUND (err u404))
 (define-constant ERR-UNAUTHORIZED (err u403))
 (define-constant ERR-INVALID-INPUT (err u400))
+(define-constant MAX-CONTENT-LENGTH u500)
+
+(define-private (is-valid-content (content (string-utf8 500)))
+  (and (> (len content) u0) (<= (len content) MAX-CONTENT-LENGTH))
+)
 
 (define-public (post-public-message (content (string-utf8 500)))
   (let
     (
       (message-id (var-get message-counter))
     )
-    (asserts! (> (len content) u0) ERR-INVALID-INPUT)
+    (asserts! (is-valid-content content) ERR-INVALID-INPUT)
     
     (map-set messages
       { message-id: message-id }
@@ -48,7 +53,7 @@
     (
       (message-id (var-get message-counter))
     )
-    (asserts! (> (len content) u0) ERR-INVALID-INPUT)
+    (asserts! (is-valid-content content) ERR-INVALID-INPUT)
     (asserts! (not (is-eq tx-sender recipient)) ERR-INVALID-INPUT)
     
     (map-set messages
@@ -74,6 +79,7 @@
       (existing-reaction (map-get? message-reactions { message-id: message-id, user: tx-sender }))
     )
     (asserts! (> (len reaction-type) u0) ERR-INVALID-INPUT)
+    (asserts! (<= (len reaction-type) u20) ERR-INVALID-INPUT)
     
     (map-set message-reactions
       { message-id: message-id, user: tx-sender }
