@@ -66,3 +66,30 @@
     (ok message-id)
   )
 )
+
+(define-public (react-to-message (message-id uint) (reaction-type (string-ascii 20)))
+  (let
+    (
+      (message (unwrap! (map-get? messages { message-id: message-id }) ERR-NOT-FOUND))
+      (existing-reaction (map-get? message-reactions { message-id: message-id, user: tx-sender }))
+    )
+    (asserts! (> (len reaction-type) u0) ERR-INVALID-INPUT)
+    
+    (map-set message-reactions
+      { message-id: message-id, user: tx-sender }
+      { reaction-type: reaction-type, reacted-at: block-height }
+    )
+    
+    (ok true)
+  )
+)
+
+(define-public (remove-reaction (message-id uint))
+  (let
+    (
+      (existing-reaction (unwrap! (map-get? message-reactions { message-id: message-id, user: tx-sender }) ERR-NOT-FOUND))
+    )
+    (map-delete message-reactions { message-id: message-id, user: tx-sender })
+    (ok true)
+  )
+)
