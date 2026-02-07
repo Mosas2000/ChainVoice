@@ -93,3 +93,29 @@
     (ok true)
   )
 )
+
+(define-read-only (get-message (message-id uint))
+  (map-get? messages { message-id: message-id })
+)
+
+(define-read-only (get-message-count)
+  (ok (var-get message-counter))
+)
+
+(define-read-only (get-reaction (message-id uint) (user principal))
+  (map-get? message-reactions { message-id: message-id, user: user })
+)
+
+(define-read-only (can-read-message (message-id uint) (reader principal))
+  (match (map-get? messages { message-id: message-id })
+    message
+      (if (get is-public message)
+        (ok true)
+        (ok (or 
+          (is-eq reader (get author message))
+          (is-eq (some reader) (get recipient message))
+        ))
+      )
+    (ok false)
+  )
+)
