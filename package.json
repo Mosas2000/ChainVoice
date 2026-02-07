@@ -11,8 +11,12 @@
   "description": "",
   "devDependencies": {
     "@hirosystems/clarinet-sdk": "^3.8.1",
+    "@stacks/cli": "^7.2.0",
     "@stacks/network": "^7.3.1",
     "@stacks/transactions": "^7.3.1",
+    "@types/node": "^25.2.1",
+    "dotenv": "^17.2.4",
+    "ts-node": "^10.9.2",
     "vitest": "^4.0.18"
   }
 }
