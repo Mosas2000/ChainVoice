@@ -37,7 +37,7 @@
       {
         author: tx-sender,
         content: content,
-        created-at: block-height,
+        created-at: stacks-block-height,
         is-public: true,
         recipient: none
       }
@@ -61,7 +61,7 @@
       {
         author: tx-sender,
         content: content,
-        created-at: block-height,
+        created-at: stacks-block-height,
         is-public: false,
         recipient: (some recipient)
       }
@@ -83,7 +83,7 @@
     
     (map-set message-reactions
       { message-id: message-id, user: tx-sender }
-      { reaction-type: reaction-type, reacted-at: block-height }
+      { reaction-type: reaction-type, reacted-at: stacks-block-height }
     )
     
     (ok true)

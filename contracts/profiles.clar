@@ -48,8 +48,8 @@
         username: username,
         bio: bio,
         avatar-url: avatar-url,
-        created-at: block-height,
-        updated-at: block-height
+        created-at: stacks-block-height,
+        updated-at: stacks-block-height
       }
     )
     
@@ -80,7 +80,7 @@
         username: username,
         bio: bio,
         avatar-url: avatar-url,
-        updated-at: block-height
+        updated-at: stacks-block-height
       })
     )
     (ok true)
@@ -106,7 +106,7 @@
     
     (map-set follows
       { follower: tx-sender, following: user-to-follow }
-      { followed-at: block-height }
+      { followed-at: stacks-block-height }
     )
     
     (map-set user-stats
