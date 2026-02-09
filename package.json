@@ -5,7 +5,10 @@
   "scripts": {
     "test": "vitest",
     "deploy:testnet": "ts-node scripts/deploy-testnet.ts",
-    "deploy:mainnet": "ts-node scripts/deploy-mainnet.ts"
+    "deploy:mainnet": "ts-node scripts/deploy-mainnet.ts",
+    "deploy:batch:mainnet": "ts-node scripts/deploy-batch-mainnet.ts",
+    "test:batch:mainnet": "ts-node scripts/test-batch-mainnet.ts",
+    "create:profile": "ts-node scripts/create-profile-batch.ts"
   },
   "keywords": [],
   "author": "",
