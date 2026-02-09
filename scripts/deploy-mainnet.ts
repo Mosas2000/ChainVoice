@@ -1,5 +1,5 @@
 import { makeContractDeploy, broadcastTransaction, AnchorMode } from '@stacks/transactions';
-import { StacksMainnet } from '@stacks/network';
+import { STACKS_MAINNET } from '@stacks/network';
 import { readFileSync } from 'fs';
 import { parse } from '@iarna/toml';
 import { generateWallet, getStxAddress } from '@stacks/wallet-sdk';
@@ -8,24 +8,21 @@ const configPath = 'settings/Mainnet.toml';
 const configFile = readFileSync(configPath, 'utf-8');
 const config: any = parse(configFile);
 
-const network = new StacksMainnet();
-network.coreApiUrl = config.network.node_url;
+const network = STACKS_MAINNET;
 
-function getDeployerKey(): string {
-  // Check if mnemonic is provided
+async function getDeployerKey(): Promise<string> {
   if (config.deployer.mnemonic && config.deployer.mnemonic !== 'your twelve or twenty four word mnemonic phrase here') {
     const accountIndex = config.deployer.account_index || 0;
-    const wallet = generateWallet({
+    const wallet = await generateWallet({
       secretKey: config.deployer.mnemonic,
       password: '',
     });
     const account = wallet.accounts[accountIndex];
     console.log(`Using mnemonic (account ${accountIndex})`);
-    console.log(`Address: ${getStxAddress({ account, network })}\n`);
+    console.log(`Address: ${getStxAddress({ account, network: 'mainnet' })}\n`);
     return account.stxPrivateKey;
   }
   
-  // Fall back to private key
   const privateKey = config.deployer.private_key;
   if (!privateKey || privateKey === 'your_mainnet_private_key_here') {
     console.error('No valid deployer credentials found in settings/Mainnet.toml');
@@ -38,10 +35,8 @@ function getDeployerKey(): string {
   return privateKey;
 }
 
-const deployerKey = getDeployerKey();
-
 async function deployContract(contractName: string, contractPath: string) {
-
+  const deployerKey = await getDeployerKey();
   const contractCode = readFileSync(contractPath, 'utf-8');
   
   console.log(`Deploying ${contractName} to mainnet...`);
@@ -58,7 +53,7 @@ async function deployContract(contractName: string, contractPath: string) {
 
   try {
     const transaction = await makeContractDeploy(txOptions);
-    const broadcastResponse = await broadcastTransaction(transaction, network);
+    const broadcastResponse = await broadcastTransaction({ transaction, network });
     
     console.log(`${contractName} deployed successfully to mainnet`);
     console.log('Transaction ID:', broadcastResponse.txid);
