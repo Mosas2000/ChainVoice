@@ -11,3 +11,8 @@ epoch = 2.5
 path = "contracts/messages.clar"
 clarity_version = 2
 epoch = 2.5
+
+[contracts.chainvoice-batch]
+path = "contracts/chainvoice-batch.clar"
+clarity_version = 2
+epoch = 2.5
