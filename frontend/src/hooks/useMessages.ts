@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getMessage, getMessageCount } from '../services/messages';
+import { getMessage, getMessageCount, getMessagesPage, getLatestMessagesInfo } from '../services/messages';
 import type { Message } from '../types';
 
 export const useMessages = (limit: number = 20, authorAddress?: string) => {
@@ -7,6 +7,8 @@ export const useMessages = (limit: number = 20, authorAddress?: string) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [totalCount, setTotalCount] = useState(0);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
 
   const fetchMessages = useCallback(async () => {
     setLoading(true);
@@ -15,6 +17,10 @@ export const useMessages = (limit: number = 20, authorAddress?: string) => {
       const count = await getMessageCount();
       setTotalCount(count);
 
+      // Use pagination info to determine what to fetch
+      const pageInfo = await getLatestMessagesInfo(limit);
+      setHasMore(pageInfo.hasMore);
+
       // For now, return empty array since we don't have real data yet
       setMessages([]);
     } catch (err: any) {
@@ -22,11 +28,31 @@ export const useMessages = (limit: number = 20, authorAddress?: string) => {
     } finally {
       setLoading(false);
     }
-  }, [limit, authorAddress]);
+  }, [limit, authorAddress, page]);
+
+  const nextPage = useCallback(() => {
+    if (hasMore) {
+      setPage((p) => p + 1);
+    }
+  }, [hasMore]);
+
+  const prevPage = useCallback(() => {
+    setPage((p) => Math.max(0, p - 1));
+  }, []);
 
   useEffect(() => {
     fetchMessages();
   }, [fetchMessages]);
 
-  return { messages, loading, error, totalCount, refetch: fetchMessages };
+  return {
+    messages,
+    loading,
+    error,
+    totalCount,
+    page,
+    hasMore,
+    nextPage,
+    prevPage,
+    refetch: fetchMessages,
+  };
 };
