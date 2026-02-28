@@ -8,7 +8,7 @@
 Creates a new user profile.
 
 Parameters:
-- username: string-ascii (max 50 chars)
+- username: string-ascii (3-50 chars, must be unique)
 - bio: string-ascii (max 500 chars)
 - avatar-url: string-ascii (max 200 chars)
 
@@ -16,13 +16,14 @@ Returns: (response bool)
 
 Errors:
 - u409: Profile already exists
-- u400: Invalid input
+- u400: Invalid input (username too short or too long)
+- u410: Username already taken by another user
 
 #### update-profile
 Updates existing profile.
 
 Parameters:
-- username: string-ascii (max 50 chars)
+- username: string-ascii (3-50 chars, must be unique if changed)
 - bio: string-ascii (max 500 chars)
 - avatar-url: string-ascii (max 200 chars)
 
@@ -31,6 +32,7 @@ Returns: (response bool)
 Errors:
 - u404: Profile not found
 - u400: Invalid input
+- u410: New username already taken by another user
 
 #### follow-user
 Follow another user.
@@ -87,6 +89,31 @@ Returns: bool
 Get total registered users.
 
 Returns: (response uint)
+
+#### get-follow-info
+Get follow relationship details.
+
+Parameters:
+- follower: principal
+- following: principal
+
+Returns: (optional follow-data)
+
+#### get-principal-by-username
+Look up which principal owns a given username.
+
+Parameters:
+- username: string-ascii (max 50 chars)
+
+Returns: (optional { user: principal })
+
+#### check-username-available
+Check if a username is available for registration.
+
+Parameters:
+- username: string-ascii (max 50 chars)
+
+Returns: (response bool) - true if available, false if taken
 
 ## Messages Contract
 
@@ -178,4 +205,4 @@ Returns: (response bool)
 - u403: Unauthorized
 - u404: Not found
 - u409: Already exists
-- u410: Inactive/disabled
+- u410: Username already taken by another user
