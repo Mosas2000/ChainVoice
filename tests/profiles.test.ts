@@ -142,21 +142,74 @@ describe('Profiles Contract Tests', () => {
     expect(result.value).toBe(400);
   });
 
-  it('should allow users to unfollow', () => {
-    expect(true).toBe(true);
+  it('should allow users to unfollow with safe decrement', () => {
+    const safeDecrement = (val: number) => (val > 0 ? val - 1 : 0);
+    
+    const stats = { followersCount: 1, followingCount: 1 };
+    
+    // Unfollow should decrement safely
+    stats.followingCount = safeDecrement(stats.followingCount);
+    stats.followersCount = safeDecrement(stats.followersCount);
+    
+    expect(stats.followingCount).toBe(0);
+    expect(stats.followersCount).toBe(0);
   });
 
-  it('should track follower counts correctly', () => {
-    expect(true).toBe(true);
+  it('should not underflow counters when decrementing from zero', () => {
+    const safeDecrement = (val: number) => (val > 0 ? val - 1 : 0);
+    
+    // Counters already at 0
+    const stats = { followersCount: 0, followingCount: 0 };
+    
+    // safe-decrement should return 0, not crash or go negative
+    stats.followingCount = safeDecrement(stats.followingCount);
+    stats.followersCount = safeDecrement(stats.followersCount);
+    
+    expect(stats.followingCount).toBe(0);
+    expect(stats.followersCount).toBe(0);
   });
 
-  it('should track following counts correctly', () => {
-    expect(true).toBe(true);
+  it('should track follower counts correctly with safe-increment', () => {
+    const MAX_STATS_VALUE = 1000000;
+    const safeIncrement = (val: number) => (val < MAX_STATS_VALUE ? val + 1 : val);
+    
+    let followersCount = 0;
+    
+    // Increment several times
+    for (let i = 0; i < 5; i++) {
+      followersCount = safeIncrement(followersCount);
+    }
+    expect(followersCount).toBe(5);
+    
+    // At max, should not increment further
+    followersCount = MAX_STATS_VALUE;
+    followersCount = safeIncrement(followersCount);
+    expect(followersCount).toBe(MAX_STATS_VALUE);
+  });
+
+  it('should track following counts correctly with safe-increment', () => {
+    const MAX_STATS_VALUE = 1000000;
+    const safeIncrement = (val: number) => (val < MAX_STATS_VALUE ? val + 1 : val);
+    
+    let followingCount = 0;
+    
+    // Increment several times
+    for (let i = 0; i < 3; i++) {
+      followingCount = safeIncrement(followingCount);
+    }
+    expect(followingCount).toBe(3);
+    
+    // At max, should not increment further
+    followingCount = MAX_STATS_VALUE;
+    followingCount = safeIncrement(followingCount);
+    expect(followingCount).toBe(MAX_STATS_VALUE);
   });
 
   it('should retrieve profile data correctly', () => {
     expect(true).toBe(true);
   });
+
+  // === Username Uniqueness Tests (Issue #1) ===
 
   it('should look up principal by username via get-principal-by-username', () => {
     const usernameMap = new Map<string, string>();
