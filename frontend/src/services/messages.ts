@@ -88,3 +88,38 @@ export async function getMessageCount(): Promise<number> {
   // TODO: Implement read-only function call
   return 0;
 }
+
+export interface PaginationInfo {
+  startId: number;
+  endId: number;
+  totalCount: number;
+  pageSize: number;
+  hasMore: boolean;
+}
+
+export async function getMessagesPage(
+  start: number,
+  pageSize: number
+): Promise<PaginationInfo> {
+  // TODO: Implement read-only call to get-messages-page
+  return {
+    startId: start,
+    endId: Math.min(start + pageSize, 0),
+    totalCount: 0,
+    pageSize,
+    hasMore: false,
+  };
+}
+
+export async function getLatestMessagesInfo(
+  pageSize: number
+): Promise<PaginationInfo> {
+  // TODO: Implement read-only call to get-latest-messages-info
+  return {
+    startId: 0,
+    endId: 0,
+    totalCount: 0,
+    pageSize,
+    hasMore: false,
+  };
+}
