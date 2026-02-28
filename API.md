@@ -46,9 +46,10 @@ Errors:
 - u404: Profile not found
 - u409: Already following
 - u400: Cannot follow self
+- u411: Counter overflow (max 1,000,000)
 
 #### unfollow-user
-Unfollow a user.
+Unfollow a user. Uses safe-decrement to prevent uint underflow.
 
 Parameters:
 - user-to-unfollow: principal
@@ -56,7 +57,8 @@ Parameters:
 Returns: (response bool)
 
 Errors:
-- u404: Not following user
+- u412: Not following user
+- u404: User stats not found
 
 ### Read-Only Functions
 
@@ -181,6 +183,40 @@ Get total message count.
 
 Returns: (response uint)
 
+#### get-author-message-count
+Get total messages posted by a specific author.
+
+Parameters:
+- author: principal
+
+Returns: (response uint)
+
+#### get-author-message-at-index
+Get full message data for an author's nth message (0-indexed).
+
+Parameters:
+- author: principal
+- index: uint
+
+Returns: (optional message-data)
+
+#### get-messages-page
+Get pagination metadata for a range of messages.
+
+Parameters:
+- start: uint (starting message ID)
+- page-size: uint
+
+Returns: (response { messages-start, page-size, total-count, has-more })
+
+#### get-latest-messages-info
+Get the ID range for the most recent N messages.
+
+Parameters:
+- page-size: uint
+
+Returns: (response { start-id, end-id, total-count, page-size })
+
 #### get-reaction
 Get specific user's reaction to a message.
 
@@ -201,8 +237,10 @@ Returns: (response bool)
 
 ## Error Codes
 
-- u400: Invalid input
+- u400: Invalid input (e.g., empty fields, username too short)
 - u403: Unauthorized
 - u404: Not found
-- u409: Already exists
+- u409: Already exists (duplicate profile)
 - u410: Username already taken by another user
+- u411: Counter overflow (stats limit reached)
+- u412: Not following (unfollow without follow relationship)

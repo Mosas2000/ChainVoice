@@ -35,8 +35,11 @@
 (define-constant ERR-UNAUTHORIZED (err u403))
 (define-constant ERR-INVALID-INPUT (err u400))
 (define-constant ERR-USERNAME-TAKEN (err u410))
+(define-constant ERR-OVERFLOW (err u411))
+(define-constant ERR-NOT-FOLLOWING (err u412))
 
 (define-constant MIN-USERNAME-LENGTH u3)
+(define-constant MAX-STATS-VALUE u1000000)
 
 (define-private (is-valid-username (username (string-ascii 50)))
   (and (>= (len username) MIN-USERNAME-LENGTH) (<= (len username) u50))
@@ -44,6 +47,20 @@
 
 (define-private (is-username-available (username (string-ascii 50)))
   (is-none (map-get? username-to-principal { username: username }))
+)
+
+(define-private (safe-decrement (value uint))
+  (if (> value u0)
+    (- value u1)
+    u0
+  )
+)
+
+(define-private (safe-increment (value uint))
+  (if (< value MAX-STATS-VALUE)
+    (+ value u1)
+    value
+  )
 )
 
 (define-public (create-profile (username (string-ascii 50)) (bio (string-ascii 500)) (avatar-url (string-ascii 200)))
@@ -127,6 +144,8 @@
     )
     (asserts! (not (is-eq tx-sender user-to-follow)) ERR-INVALID-INPUT)
     (asserts! (is-none existing-follow) ERR-ALREADY-EXISTS)
+    (asserts! (< (get following-count follower-stats) MAX-STATS-VALUE) ERR-OVERFLOW)
+    (asserts! (< (get followers-count following-stats) MAX-STATS-VALUE) ERR-OVERFLOW)
     
     (map-set follows
       { follower: tx-sender, following: user-to-follow }
@@ -135,12 +154,12 @@
     
     (map-set user-stats
       { user: tx-sender }
-      (merge follower-stats { following-count: (+ (get following-count follower-stats) u1) })
+      (merge follower-stats { following-count: (safe-increment (get following-count follower-stats)) })
     )
     
     (map-set user-stats
       { user: user-to-follow }
-      (merge following-stats { followers-count: (+ (get followers-count following-stats) u1) })
+      (merge following-stats { followers-count: (safe-increment (get followers-count following-stats)) })
     )
     
     (ok true)
@@ -150,7 +169,7 @@
 (define-public (unfollow-user (user-to-unfollow principal))
   (let
     (
-      (existing-follow (unwrap! (map-get? follows { follower: tx-sender, following: user-to-unfollow }) ERR-NOT-FOUND))
+      (existing-follow (unwrap! (map-get? follows { follower: tx-sender, following: user-to-unfollow }) ERR-NOT-FOLLOWING))
       (follower-stats (unwrap! (map-get? user-stats { user: tx-sender }) ERR-NOT-FOUND))
       (following-stats (unwrap! (map-get? user-stats { user: user-to-unfollow }) ERR-NOT-FOUND))
     )
@@ -158,12 +177,12 @@
     
     (map-set user-stats
       { user: tx-sender }
-      (merge follower-stats { following-count: (- (get following-count follower-stats) u1) })
+      (merge follower-stats { following-count: (safe-decrement (get following-count follower-stats)) })
     )
     
     (map-set user-stats
       { user: user-to-unfollow }
-      (merge following-stats { followers-count: (- (get followers-count following-stats) u1) })
+      (merge following-stats { followers-count: (safe-decrement (get followers-count following-stats)) })
     )
     
     (ok true)
