@@ -3,13 +3,13 @@ import { useAuth } from '@/contexts/AuthContext';
 import { followUser, unfollowUser } from '@/services/profiles';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Profile, UserStats, FollowInfo } from '@/types';
-import { User, Calendar, Users } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 
 interface ProfileCardProps {
   profile: Profile;
+  profileAddress: string;
   stats?: UserStats | null;
   followInfo?: FollowInfo | null;
   onFollowChange?: () => void;
@@ -19,6 +19,7 @@ interface ProfileCardProps {
 
 export function ProfileCard({
   profile,
+  profileAddress,
   stats,
   followInfo,
   onFollowChange,
@@ -40,9 +41,9 @@ export function ProfileCard({
 
     try {
       if (followInfo?.isFollowing) {
-        await unfollowUser(profile.owner);
+        await unfollowUser(profileAddress);
       } else {
-        await followUser(profile.owner);
+        await followUser(profileAddress);
       }
       onFollowChange?.();
     } catch (err) {
@@ -69,7 +70,7 @@ export function ProfileCard({
     });
   };
 
-  const displayName = profile.displayName || profile.username;
+  const displayName = profile.username;
 
   return (
     <Card>
@@ -85,11 +86,6 @@ export function ProfileCard({
             <div>
               <CardTitle>{displayName}</CardTitle>
               <CardDescription>@{profile.username}</CardDescription>
-              {profile.isVerified && (
-                <Badge variant="secondary" className="mt-1">
-                  Verified
-                </Badge>
-              )}
             </div>
           </div>
 
@@ -99,7 +95,7 @@ export function ProfileCard({
             </Button>
           ) : (
             isAuthenticated &&
-            userAddress !== profile.owner && (
+            userAddress !== profileAddress && (
               <Button
                 onClick={handleFollowToggle}
                 disabled={loading}
@@ -127,11 +123,11 @@ export function ProfileCard({
         {stats && (
           <div className="flex items-center gap-6 pt-2 border-t">
             <div className="text-center">
-              <div className="font-semibold">{stats.messageCount}</div>
+              <div className="font-semibold">{stats.postsCount}</div>
               <div className="text-xs text-muted-foreground">Messages</div>
             </div>
             <div className="text-center">
-              <div className="font-semibold">{stats.followerCount}</div>
+              <div className="font-semibold">{stats.followersCount}</div>
               <div className="text-xs text-muted-foreground">Followers</div>
             </div>
             <div className="text-center">
