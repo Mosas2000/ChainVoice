@@ -5,6 +5,7 @@ import { Header } from '@/components/layout/Header';
 import { Home } from '@/pages/Home';
 import { Feed } from '@/pages/Feed';
 import { Profile } from '@/pages/Profile';
+import { NotFound } from '@/pages/NotFound';
 
 function App() {
   return (
@@ -17,11 +18,13 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/feed" element={<Feed />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
         </AuthProvider>
       </Router>
     </ErrorBoundary>
+>>>>>>> 0e34bd3 (Add a 404 catch-all route for invalid URLs)
   );
 }
 
