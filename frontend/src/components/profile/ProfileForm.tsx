@@ -15,7 +15,6 @@ interface ProfileFormProps {
 export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
   const { isAuthenticated } = useAuth();
   const [username, setUsername] = useState('');
-  const [displayName, setDisplayName] = useState('');
   const [bio, setBio] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -24,7 +23,6 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
   useEffect(() => {
     if (existingProfile) {
       setUsername(existingProfile.username);
-      setDisplayName(existingProfile.displayName || '');
       setBio(existingProfile.bio || '');
       setAvatarUrl(existingProfile.avatarUrl || '');
     }
@@ -42,9 +40,9 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
 
     try {
       if (existingProfile) {
-        await updateProfile(displayName, bio, avatarUrl);
+        await updateProfile(username, bio, avatarUrl);
       } else {
-        await createProfile(username, displayName, bio, avatarUrl);
+        await createProfile(username, bio, avatarUrl);
       }
       onSuccess?.();
     } catch (err) {
@@ -87,26 +85,14 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
               onChange={(e) => setUsername(e.target.value)}
               placeholder="satoshi_nakamoto"
               required
-              disabled={!!existingProfile}
-              className={existingProfile ? 'bg-muted' : ''}
+              minLength={3}
+              maxLength={50}
             />
             {existingProfile && (
               <p className="text-xs text-muted-foreground mt-1">
-                Username cannot be changed
+                Changing your username will release the old one
               </p>
             )}
-          </div>
-
-          <div>
-            <label htmlFor="displayName" className="block text-sm font-medium mb-1">
-              Display Name
-            </label>
-            <Input
-              id="displayName"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-              placeholder="Satoshi Nakamoto"
-            />
           </div>
 
           <div>

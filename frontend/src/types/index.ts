@@ -2,7 +2,6 @@ export interface Profile {
   username: string;
   bio?: string;
   avatarUrl?: string;
-  displayName?: string;
   createdAt: number;
   updatedAt?: number;
 }
@@ -10,10 +9,11 @@ export interface Profile {
 export interface UserStats {
   followersCount: number;
   followingCount: number;
-  postsCount?: number;
+  postsCount: number;
 }
 
 export interface Message {
+  id?: number;
   author: string;
   content: string;
   timestamp: number;
@@ -22,12 +22,11 @@ export interface Message {
 }
 
 export interface Reaction {
-  reactor: string;
-  emoji: string;
-  timestamp: number;
+  reactionType: string;
+  reactedAt: number;
 }
 
 export interface FollowInfo {
-  followersCount: number;
-  followingCount: number;
+  isFollowing: boolean;
+  followedAt?: number;
 }
