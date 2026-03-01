@@ -127,7 +127,7 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
               className={bio.length > LIMITS.bio.max ? 'border-destructive' : ''}
             />
             <div className="flex justify-end mt-1">
-              <CharacterCounter current={bio.length} max={LIMITS.bio.max} />
+              <CharacterCounter current={bio.length} max={LIMITS.bio.max} showBar />
             </div>
           </div>
 
