@@ -87,14 +87,19 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
               onChange={(e) => setUsername(e.target.value)}
               placeholder="satoshi_nakamoto"
               required
-              minLength={3}
-              maxLength={50}
+              minLength={LIMITS.username.min}
+              maxLength={LIMITS.username.max}
             />
-            {existingProfile && (
-              <p className="text-xs text-muted-foreground mt-1">
-                Changing your username will release the old one
-              </p>
-            )}
+            <div className="flex items-center justify-between mt-1">
+              {existingProfile ? (
+                <p className="text-xs text-muted-foreground">
+                  Changing your username will release the old one
+                </p>
+              ) : (
+                <span />
+              )}
+              <CharacterCounter current={username.length} max={LIMITS.username.max} />
+            </div>
           </div>
 
           <div>
