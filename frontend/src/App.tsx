@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
 import { Home } from '@/pages/Home';
 import { Feed } from '@/pages/Feed';
 import { Profile } from '@/pages/Profile';
@@ -20,11 +21,11 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <Footer />
           </div>
         </AuthProvider>
       </Router>
     </ErrorBoundary>
->>>>>>> 0e34bd3 (Add a 404 catch-all route for invalid URLs)
   );
 }
 
