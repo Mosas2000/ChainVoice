@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { CharacterCounter } from '@/components/ui/character-counter';
+import { LIMITS } from '@/config/limits';
 import type { Profile } from '@/types';
 
 interface ProfileFormProps {
@@ -105,7 +107,11 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
               onChange={(e) => setBio(e.target.value)}
               placeholder="Tell us about yourself..."
               rows={4}
+              maxLength={LIMITS.bio.max}
             />
+            <div className="flex justify-end mt-1">
+              <CharacterCounter current={bio.length} max={LIMITS.bio.max} />
+            </div>
           </div>
 
           <div>
