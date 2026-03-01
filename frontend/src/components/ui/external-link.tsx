@@ -4,6 +4,8 @@ import { cn } from '@/lib/utils';
 interface ExternalLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string;
   showIcon?: boolean;
+  /** Accessible name — defaults to "opens in a new tab" suffix */
+  label?: string;
   children: React.ReactNode;
 }
 
@@ -14,6 +16,7 @@ interface ExternalLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement
 export function ExternalLink({
   href,
   showIcon = false,
+  label,
   className,
   children,
   ...props
@@ -23,6 +26,7 @@ export function ExternalLink({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      aria-label={label ? `${label} (opens in a new tab)` : undefined}
       className={cn('inline-flex items-center gap-1', className)}
       {...props}
     >
