@@ -10,3 +10,5 @@ export const EXTERNAL_LINKS = {
   leatherWallet: 'https://leather.io',
   xverseWallet: 'https://www.xverse.app',
 } as const;
+
+export type ExternalLinkKey = keyof typeof EXTERNAL_LINKS;
