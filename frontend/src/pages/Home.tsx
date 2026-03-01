@@ -147,12 +147,6 @@ export function Home() {
         </Card>
       </div>
 
-      {/* Footer */}
-      <div className="text-center py-8 border-t">
-        <p className="text-sm text-muted-foreground">
-          Built on Stacks • Secured by Bitcoin • Powered by Clarity Smart Contracts
-        </p>
-      </div>
     </div>
   );
 }
