@@ -24,7 +24,7 @@ export function Footer() {
           {/* Navigation */}
           <div className="space-y-3">
             <h4 className="text-sm font-semibold">Navigation</h4>
-            <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
+            <nav aria-label="Footer navigation" className="flex flex-col gap-2 text-sm text-muted-foreground">
               <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
               <Link to="/feed" className="hover:text-foreground transition-colors">Feed</Link>
               <Link to="/profile" className="hover:text-foreground transition-colors">Profile</Link>
@@ -34,7 +34,7 @@ export function Footer() {
           {/* Resources */}
           <div className="space-y-3">
             <h4 className="text-sm font-semibold">Resources</h4>
-            <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
+            <nav aria-label="Resources" className="flex flex-col gap-2 text-sm text-muted-foreground">
               <ExternalLink
                 href={EXTERNAL_LINKS.github}
                 className="hover:text-foreground transition-colors"
@@ -59,7 +59,7 @@ export function Footer() {
           {/* Wallets */}
           <div className="space-y-3">
             <h4 className="text-sm font-semibold">Wallets</h4>
-            <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
+            <nav aria-label="Wallets" className="flex flex-col gap-2 text-sm text-muted-foreground">
               <ExternalLink
                 href={EXTERNAL_LINKS.leatherWallet}
                 className="hover:text-foreground transition-colors"
