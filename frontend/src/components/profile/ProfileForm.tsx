@@ -40,6 +40,11 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
       return;
     }
 
+    if (!usernameValidation.valid) {
+      setError(usernameValidation.error || 'Invalid username');
+      return;
+    }
+
     if (bio.length > LIMITS.bio.max) {
       setError(`Bio must be ${LIMITS.bio.max} characters or fewer`);
       return;
