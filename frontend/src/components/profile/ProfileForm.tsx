@@ -98,6 +98,9 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
           <div>
             <label htmlFor="username" className="block text-sm font-medium mb-1">
               Username {!existingProfile && <span className="text-red-500">*</span>}
+              <span className="text-xs text-muted-foreground font-normal ml-2">
+                3–50 chars · lowercase letters, numbers, _ and -
+              </span>
             </label>
             <Input
               id="username"
