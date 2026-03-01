@@ -87,6 +87,7 @@ export function MessageCard({
   const displayName = authorUsername || formatAddress(message.author);
 
   return (
+    <article aria-label={`Message from ${displayName}`}>
     <Card>
       <CardContent className="pt-6">
         <div className="space-y-3">
@@ -157,5 +158,6 @@ export function MessageCard({
         </div>
       </CardContent>
     </Card>
+    </article>
   );
 }
