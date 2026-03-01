@@ -8,6 +8,11 @@ interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
 /**
  * A low-level skeleton placeholder that pulses to indicate loading.
  * Compose higher-level skeleton screens out of multiple Skeleton blocks.
+ *
+ * Includes a visually-hidden "Loading…" span so individual blocks are
+ * not silent when inspected by assistive technology.  Wrap groups of
+ * skeletons in a role="status" container with a descriptive aria-label
+ * to avoid excessive announcements.
  */
 export function Skeleton({ className, round = false, ...props }: SkeletonProps) {
   return (
@@ -17,6 +22,7 @@ export function Skeleton({ className, round = false, ...props }: SkeletonProps) 
         round ? 'rounded-full' : 'rounded-md',
         className,
       )}
+      aria-hidden="true"
       {...props}
     />
   );
