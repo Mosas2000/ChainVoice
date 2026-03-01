@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { ExternalLink } from '@/components/ui/external-link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MessageSquare, Shield, Wallet, Zap } from 'lucide-react';
+import { MessageSquare, Shield, Wallet, Zap, Github } from 'lucide-react';
 import { EXTERNAL_LINKS } from '@/config/links';
 
 export function Home() {
@@ -27,6 +27,7 @@ export function Home() {
           </Link>
           <ExternalLink href={EXTERNAL_LINKS.github} label="ChainVoice on GitHub">
             <Button size="lg" variant="outline">
+              <Github className="h-4 w-4 mr-2" />
               View on GitHub
             </Button>
           </ExternalLink>
