@@ -7,6 +7,15 @@ import { LIMITS } from '@/config/limits';
  */
 const USERNAME_PATTERN = /^[a-z0-9_-]+$/;
 
+/** Returns true when every character is in the printable ASCII range (32–126). */
+function isAscii(value: string): boolean {
+  for (let i = 0; i < value.length; i++) {
+    const code = value.charCodeAt(i);
+    if (code < 32 || code > 126) return false;
+  }
+  return true;
+}
+
 export interface UsernameValidation {
   valid: boolean;
   error: string | null;
@@ -36,6 +45,13 @@ export function validateUsername(value: string): UsernameValidation {
     return {
       valid: false,
       error: `Username must be ${LIMITS.username.max} characters or fewer`,
+    };
+  }
+
+  if (!isAscii(value)) {
+    return {
+      valid: false,
+      error: 'Username must contain only ASCII characters',
     };
   }
 
