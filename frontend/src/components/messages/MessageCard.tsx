@@ -103,9 +103,12 @@ export function MessageCard({
               <div>
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-sm">{displayName}</span>
-                  <span className="text-xs text-muted-foreground">
+                  <time
+                    dateTime={new Date(message.timestamp).toISOString()}
+                    className="text-xs text-muted-foreground"
+                  >
                     {formatDate(message.timestamp)}
-                  </span>
+                  </time>
                 </div>
                 <div className="text-xs text-muted-foreground">
                   {formatAddress(message.author)}
