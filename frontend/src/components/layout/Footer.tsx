@@ -25,9 +25,9 @@ export function Footer() {
           <div className="space-y-3">
             <h4 className="text-sm font-semibold">Navigation</h4>
             <nav aria-label="Footer navigation" className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
-              <Link to="/feed" className="hover:text-foreground transition-colors">Feed</Link>
-              <Link to="/profile" className="hover:text-foreground transition-colors">Profile</Link>
+              <Link to="/" className="hover:text-foreground transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">Home</Link>
+              <Link to="/feed" className="hover:text-foreground transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">Feed</Link>
+              <Link to="/profile" className="hover:text-foreground transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">Profile</Link>
             </nav>
           </div>
 
