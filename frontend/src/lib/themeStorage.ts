@@ -1,4 +1,4 @@
-import type { Theme } from '@/types/theme';
+import type { Theme, ResolvedTheme } from '@/types/theme';
 
 const STORAGE_KEY = 'chainvoice-theme';
 
@@ -26,4 +26,17 @@ export function setStoredTheme(theme: Theme): void {
   } catch {
     // Silently ignore write failures
   }
+}
+
+/**
+ * Resolve the effective theme by evaluating the system preference.
+ * When the user has chosen "system", we check the media query.
+ */
+export function resolveTheme(theme: Theme): ResolvedTheme {
+  if (theme === 'system') {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
+  }
+  return theme;
 }
