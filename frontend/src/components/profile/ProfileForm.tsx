@@ -152,7 +152,16 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
             </div>
           )}
 
-          <Button type="submit" disabled={loading} className="w-full">
+          <Button
+            type="submit"
+            disabled={
+              loading ||
+              bio.length > LIMITS.bio.max ||
+              avatarUrl.length > LIMITS.avatarUrl.max ||
+              username.length > LIMITS.username.max
+            }
+            className="w-full"
+          >
             {loading ? 'Saving...' : existingProfile ? 'Update Profile' : 'Create Profile'}
           </Button>
         </form>
