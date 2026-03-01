@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
  */
 export function MessageCardSkeleton() {
   return (
-    <Card>
+    <Card aria-label="Loading message" role="status">
       <CardContent className="pt-6">
         <div className="space-y-3">
           {/* Header */}
