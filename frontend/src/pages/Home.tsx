@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { ExternalLink } from '@/components/ui/external-link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MessageSquare, Shield, Wallet, Zap } from 'lucide-react';
+import { EXTERNAL_LINKS } from '@/config/links';
 
 export function Home() {
   return (
@@ -23,15 +25,11 @@ export function Home() {
               Get Started
             </Button>
           </Link>
-          <a
-            href="https://github.com/Mosas2000/ChainVoice"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <ExternalLink href={EXTERNAL_LINKS.github}>
             <Button size="lg" variant="outline">
               View on GitHub
             </Button>
-          </a>
+          </ExternalLink>
         </div>
       </div>
 
