@@ -6,6 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Decentralized social platform built on Stacks, secured by Bitcoin" />
     <title>ChainVoice</title>
+    <!-- Prevent a white flash before React loads by applying the stored theme
+         class to <html> synchronously, before main.tsx runs. -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('chainvoice-theme');
+          var dark =
+            t === 'dark' ||
+            (t !== 'light' &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.classList.toggle('dark', dark);
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
