@@ -32,6 +32,7 @@ export function ExternalLink({
     >
       {children}
       {showIcon && <ExternalLinkIcon className="h-3 w-3 shrink-0" aria-hidden="true" />}
+      <span className="sr-only">(opens in a new tab)</span>
     </a>
   );
 }
