@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import { useMessages } from '@/hooks/useMessages';
 import { MessageCard } from './MessageCard';
+import { MessageFeedSkeleton } from './MessageFeedSkeleton';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Loader2, RefreshCw } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 
 interface MessageFeedProps {
   limit?: number;
@@ -18,16 +19,7 @@ export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
   }, [authorAddress, limit, refetch]);
 
   if (loading && messages.length === 0) {
-    return (
-      <Card>
-        <CardContent className="flex items-center justify-center py-12">
-          <div className="text-center space-y-3">
-            <Loader2 className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">Loading messages...</p>
-          </div>
-        </CardContent>
-      </Card>
-    );
+    return <MessageFeedSkeleton />;
   }
 
   if (error) {
