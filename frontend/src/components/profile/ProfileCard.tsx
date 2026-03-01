@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Profile, UserStats, FollowInfo } from '@/types';
-import { Calendar } from 'lucide-react';
+import { Calendar, User } from 'lucide-react';
 
 interface ProfileCardProps {
   profile: Profile;
@@ -138,7 +138,7 @@ export function ProfileCard({
         )}
 
         {error && (
-          <div className="bg-destructive/15 text-destructive text-sm p-2 rounded-md">
+          <div role="alert" className="bg-destructive/15 text-destructive text-sm p-2 rounded-md">
             {error}
           </div>
         )}
