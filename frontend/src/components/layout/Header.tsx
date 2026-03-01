@@ -20,7 +20,7 @@ export function Header() {
             <span className="text-xl font-semibold">ChainVoice</span>
           </Link>
           {isAuthenticated && (
-            <nav className="flex items-center gap-4">
+            <nav aria-label="Main navigation" className="flex items-center gap-4">
               <Link
                 to="/"
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
