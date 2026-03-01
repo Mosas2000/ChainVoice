@@ -92,7 +92,23 @@ export function Home() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Use Leather, Xverse, or any Stacks wallet to connect to ChainVoice.
+                Use{' '}
+                <ExternalLink
+                  href={EXTERNAL_LINKS.leatherWallet}
+                  className="underline hover:text-foreground"
+                  label="Leather wallet"
+                >
+                  Leather
+                </ExternalLink>
+                ,{' '}
+                <ExternalLink
+                  href={EXTERNAL_LINKS.xverseWallet}
+                  className="underline hover:text-foreground"
+                  label="Xverse wallet"
+                >
+                  Xverse
+                </ExternalLink>
+                , or any Stacks wallet to connect to ChainVoice.
                 No email or personal information required.
               </p>
             </CardContent>
