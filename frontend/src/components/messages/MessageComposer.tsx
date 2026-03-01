@@ -94,6 +94,8 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
               size="sm"
               onClick={() => setIsPublic(true)}
               disabled={!!recipientAddress}
+              aria-pressed={isPublic}
+              aria-label="Public message"
             >
               <Globe className="h-4 w-4 mr-1" />
               Public
@@ -103,6 +105,8 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
               variant={!isPublic ? 'default' : 'outline'}
               size="sm"
               onClick={() => setIsPublic(false)}
+              aria-pressed={!isPublic}
+              aria-label="Direct message"
             >
               <Lock className="h-4 w-4 mr-1" />
               Direct
