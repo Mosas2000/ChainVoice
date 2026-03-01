@@ -47,6 +47,12 @@ export function Footer() {
               >
                 Stacks Docs
               </ExternalLink>
+              <ExternalLink
+                href={EXTERNAL_LINKS.stacksExplorer}
+                className="hover:text-foreground transition-colors"
+              >
+                Stacks Explorer
+              </ExternalLink>
             </nav>
           </div>
 
