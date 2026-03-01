@@ -99,6 +99,7 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
               required
               minLength={LIMITS.username.min}
               maxLength={LIMITS.username.max}
+              className={username.length > LIMITS.username.max ? 'border-destructive' : ''}
             />
             <div className="flex items-center justify-between mt-1">
               {existingProfile ? (
@@ -141,6 +142,7 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
               placeholder="https://..."
               type="url"
               maxLength={LIMITS.avatarUrl.max}
+              className={avatarUrl.length > LIMITS.avatarUrl.max ? 'border-destructive' : ''}
             />
             <div className="flex justify-end mt-1">
               <CharacterCounter current={avatarUrl.length} max={LIMITS.avatarUrl.max} />
