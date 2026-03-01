@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Globe, Lock } from 'lucide-react';
+import { LIMITS } from '@/config/limits';
 
 interface MessageComposerProps {
   onSuccess?: () => void;
@@ -22,7 +23,7 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const maxLength = 500;
+  const maxLength = LIMITS.messageContent.max;
   const remainingChars = maxLength - content.length;
 
   const handleSubmit = async (e: React.FormEvent) => {
