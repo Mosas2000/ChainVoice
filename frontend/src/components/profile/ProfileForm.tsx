@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { createProfile, updateProfile } from '@/services/profiles';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,7 +6,9 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { CharacterCounter } from '@/components/ui/character-counter';
+import { CheckCircle2, XCircle } from 'lucide-react';
 import { LIMITS } from '@/config/limits';
+import { validateUsername, isAscii } from '@/lib/validateUsername';
 import type { Profile } from '@/types';
 
 interface ProfileFormProps {
@@ -21,6 +23,8 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
   const [avatarUrl, setAvatarUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const usernameValidation = useMemo(() => validateUsername(username), [username]);
 
   useEffect(() => {
     if (existingProfile) {
@@ -37,13 +41,28 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
       return;
     }
 
+    if (!usernameValidation.valid) {
+      setError(usernameValidation.error || 'Invalid username');
+      return;
+    }
+
     if (bio.length > LIMITS.bio.max) {
       setError(`Bio must be ${LIMITS.bio.max} characters or fewer`);
       return;
     }
 
+    if (bio.length > 0 && !isAscii(bio)) {
+      setError('Bio must contain only ASCII characters (the contract uses string-ascii)');
+      return;
+    }
+
     if (avatarUrl.length > LIMITS.avatarUrl.max) {
       setError(`Avatar URL must be ${LIMITS.avatarUrl.max} characters or fewer`);
+      return;
+    }
+
+    if (avatarUrl.length > 0 && !isAscii(avatarUrl)) {
+      setError('Avatar URL must contain only ASCII characters (the contract uses string-ascii)');
       return;
     }
 
@@ -90,25 +109,45 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
           <div>
             <label htmlFor="username" className="block text-sm font-medium mb-1">
               Username {!existingProfile && <span className="text-red-500">*</span>}
+              <span className="text-xs text-muted-foreground font-normal ml-2">
+                3–50 chars · lowercase letters, numbers, _ and -
+              </span>
             </label>
             <Input
               id="username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value.toLowerCase())}
               placeholder="satoshi_nakamoto"
               required
               minLength={LIMITS.username.min}
               maxLength={LIMITS.username.max}
-              className={username.length > LIMITS.username.max ? 'border-destructive' : ''}
+              pattern="[a-z0-9_-]+"
+              title="Lowercase letters, numbers, underscores, and hyphens only"
+              aria-invalid={!!usernameValidation.error}
+              aria-describedby="username-feedback"
+              className={
+                usernameValidation.error ? 'border-destructive' :
+                username.length > LIMITS.username.max ? 'border-destructive' : ''
+              }
             />
             <div className="flex items-center justify-between mt-1">
-              {existingProfile ? (
-                <p className="text-xs text-muted-foreground">
-                  Changing your username will release the old one
-                </p>
-              ) : (
-                <span />
-              )}
+              <div id="username-feedback">
+                {usernameValidation.error ? (
+                  <p className="text-xs text-destructive flex items-center gap-1">
+                    <XCircle className="h-3 w-3" />
+                    {usernameValidation.error}
+                  </p>
+                ) : existingProfile ? (
+                  <p className="text-xs text-muted-foreground">
+                    Changing your username will release the old one
+                  </p>
+                ) : username.length > 0 ? (
+                  <p className="text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
+                    <CheckCircle2 className="h-3 w-3" />
+                    Username format looks good
+                  </p>
+                ) : null}
+              </div>
               <CharacterCounter current={username.length} max={LIMITS.username.max} />
             </div>
           </div>
@@ -137,6 +176,9 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
           <div>
             <label htmlFor="avatarUrl" className="block text-sm font-medium mb-1">
               Avatar URL
+              <span className="text-xs text-muted-foreground font-normal ml-2">
+                ASCII characters only · max {LIMITS.avatarUrl.max}
+              </span>
             </label>
             <Input
               id="avatarUrl"
@@ -162,9 +204,9 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
             type="submit"
             disabled={
               loading ||
+              !usernameValidation.valid ||
               bio.length > LIMITS.bio.max ||
-              avatarUrl.length > LIMITS.avatarUrl.max ||
-              username.length > LIMITS.username.max
+              avatarUrl.length > LIMITS.avatarUrl.max
             }
             className="w-full"
           >
