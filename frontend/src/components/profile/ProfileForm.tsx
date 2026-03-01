@@ -61,6 +61,11 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
       return;
     }
 
+    if (avatarUrl.length > 0 && !isAscii(avatarUrl)) {
+      setError('Avatar URL must contain only ASCII characters (the contract uses string-ascii)');
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
