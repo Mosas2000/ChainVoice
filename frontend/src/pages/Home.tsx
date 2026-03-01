@@ -25,7 +25,7 @@ export function Home() {
               Get Started
             </Button>
           </Link>
-          <ExternalLink href={EXTERNAL_LINKS.github}>
+          <ExternalLink href={EXTERNAL_LINKS.github} label="ChainVoice on GitHub">
             <Button size="lg" variant="outline">
               View on GitHub
             </Button>
