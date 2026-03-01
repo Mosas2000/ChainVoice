@@ -110,6 +110,8 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
               required
               minLength={LIMITS.username.min}
               maxLength={LIMITS.username.max}
+              pattern="[a-z0-9_-]+"
+              title="Lowercase letters, numbers, underscores, and hyphens only"
               className={
                 usernameValidation.error ? 'border-destructive' :
                 username.length > LIMITS.username.max ? 'border-destructive' : ''
