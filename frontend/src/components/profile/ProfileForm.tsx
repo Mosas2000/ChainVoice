@@ -37,6 +37,16 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
       return;
     }
 
+    if (bio.length > LIMITS.bio.max) {
+      setError(`Bio must be ${LIMITS.bio.max} characters or fewer`);
+      return;
+    }
+
+    if (avatarUrl.length > LIMITS.avatarUrl.max) {
+      setError(`Avatar URL must be ${LIMITS.avatarUrl.max} characters or fewer`);
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
