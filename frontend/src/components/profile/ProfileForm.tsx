@@ -112,13 +112,15 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
               maxLength={LIMITS.username.max}
               pattern="[a-z0-9_-]+"
               title="Lowercase letters, numbers, underscores, and hyphens only"
+              aria-invalid={!!usernameValidation.error}
+              aria-describedby="username-feedback"
               className={
                 usernameValidation.error ? 'border-destructive' :
                 username.length > LIMITS.username.max ? 'border-destructive' : ''
               }
             />
             <div className="flex items-center justify-between mt-1">
-              <div>
+              <div id="username-feedback">
                 {usernameValidation.error ? (
                   <p className="text-xs text-destructive">{usernameValidation.error}</p>
                 ) : existingProfile ? (
