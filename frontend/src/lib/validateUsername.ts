@@ -73,5 +73,12 @@ export function validateUsername(value: string): UsernameValidation {
     };
   }
 
+  if (/[-_]{2,}/.test(value)) {
+    return {
+      valid: false,
+      error: 'Username cannot have consecutive hyphens or underscores',
+    };
+  }
+
   return { valid: true, error: null };
 }
