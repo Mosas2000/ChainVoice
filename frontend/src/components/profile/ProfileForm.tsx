@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { CharacterCounter } from '@/components/ui/character-counter';
+import { CheckCircle2, XCircle } from 'lucide-react';
 import { LIMITS } from '@/config/limits';
 import { validateUsername } from '@/lib/validateUsername';
 import type { Profile } from '@/types';
@@ -122,13 +123,19 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
             <div className="flex items-center justify-between mt-1">
               <div id="username-feedback">
                 {usernameValidation.error ? (
-                  <p className="text-xs text-destructive">{usernameValidation.error}</p>
+                  <p className="text-xs text-destructive flex items-center gap-1">
+                    <XCircle className="h-3 w-3" />
+                    {usernameValidation.error}
+                  </p>
                 ) : existingProfile ? (
                   <p className="text-xs text-muted-foreground">
                     Changing your username will release the old one
                   </p>
                 ) : username.length > 0 ? (
-                  <p className="text-xs text-green-600 dark:text-green-400">Username format looks good</p>
+                  <p className="text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
+                    <CheckCircle2 className="h-3 w-3" />
+                    Username format looks good
+                  </p>
                 ) : null}
               </div>
               <CharacterCounter current={username.length} max={LIMITS.username.max} />
