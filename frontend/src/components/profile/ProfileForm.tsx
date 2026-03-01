@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { CharacterCounter } from '@/components/ui/character-counter';
+import { LIMITS } from '@/config/limits';
 import type { Profile } from '@/types';
 
 interface ProfileFormProps {
@@ -32,6 +34,16 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
     e.preventDefault();
     if (!isAuthenticated) {
       setError('Please connect your wallet first');
+      return;
+    }
+
+    if (bio.length > LIMITS.bio.max) {
+      setError(`Bio must be ${LIMITS.bio.max} characters or fewer`);
+      return;
+    }
+
+    if (avatarUrl.length > LIMITS.avatarUrl.max) {
+      setError(`Avatar URL must be ${LIMITS.avatarUrl.max} characters or fewer`);
       return;
     }
 
@@ -85,19 +97,28 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
               onChange={(e) => setUsername(e.target.value)}
               placeholder="satoshi_nakamoto"
               required
-              minLength={3}
-              maxLength={50}
+              minLength={LIMITS.username.min}
+              maxLength={LIMITS.username.max}
+              className={username.length > LIMITS.username.max ? 'border-destructive' : ''}
             />
-            {existingProfile && (
-              <p className="text-xs text-muted-foreground mt-1">
-                Changing your username will release the old one
-              </p>
-            )}
+            <div className="flex items-center justify-between mt-1">
+              {existingProfile ? (
+                <p className="text-xs text-muted-foreground">
+                  Changing your username will release the old one
+                </p>
+              ) : (
+                <span />
+              )}
+              <CharacterCounter current={username.length} max={LIMITS.username.max} />
+            </div>
           </div>
 
           <div>
             <label htmlFor="bio" className="block text-sm font-medium mb-1">
               Bio
+              <span className="text-xs text-muted-foreground font-normal ml-2">
+                ASCII characters only
+              </span>
             </label>
             <Textarea
               id="bio"
@@ -105,7 +126,12 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
               onChange={(e) => setBio(e.target.value)}
               placeholder="Tell us about yourself..."
               rows={4}
+              maxLength={LIMITS.bio.max}
+              className={bio.length > LIMITS.bio.max ? 'border-destructive' : ''}
             />
+            <div className="flex justify-end mt-1">
+              <CharacterCounter current={bio.length} max={LIMITS.bio.max} showBar />
+            </div>
           </div>
 
           <div>
@@ -118,7 +144,12 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
               onChange={(e) => setAvatarUrl(e.target.value)}
               placeholder="https://..."
               type="url"
+              maxLength={LIMITS.avatarUrl.max}
+              className={avatarUrl.length > LIMITS.avatarUrl.max ? 'border-destructive' : ''}
             />
+            <div className="flex justify-end mt-1">
+              <CharacterCounter current={avatarUrl.length} max={LIMITS.avatarUrl.max} />
+            </div>
           </div>
 
           {error && (
@@ -127,7 +158,16 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
             </div>
           )}
 
-          <Button type="submit" disabled={loading} className="w-full">
+          <Button
+            type="submit"
+            disabled={
+              loading ||
+              bio.length > LIMITS.bio.max ||
+              avatarUrl.length > LIMITS.avatarUrl.max ||
+              username.length > LIMITS.username.max
+            }
+            className="w-full"
+          >
             {loading ? 'Saving...' : existingProfile ? 'Update Profile' : 'Create Profile'}
           </Button>
         </form>

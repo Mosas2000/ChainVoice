@@ -5,8 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import { CharacterCounter } from '@/components/ui/character-counter';
 import { Globe, Lock } from 'lucide-react';
+import { LIMITS } from '@/config/limits';
 
 interface MessageComposerProps {
   onSuccess?: () => void;
@@ -22,8 +23,7 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const maxLength = 500;
-  const remainingChars = maxLength - content.length;
+  const maxLength = LIMITS.messageContent.max;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -155,9 +155,7 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
                   </span>
                 )}
               </div>
-              <Badge variant={remainingChars < 0 ? 'destructive' : remainingChars < 50 ? 'secondary' : 'outline'}>
-                {remainingChars}
-              </Badge>
+              <CharacterCounter current={content.length} max={maxLength} showBar />
             </div>
           </div>
 
