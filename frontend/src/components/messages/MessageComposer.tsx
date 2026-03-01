@@ -24,7 +24,6 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
   const [error, setError] = useState<string | null>(null);
 
   const maxLength = LIMITS.messageContent.max;
-  const remainingChars = maxLength - content.length;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
