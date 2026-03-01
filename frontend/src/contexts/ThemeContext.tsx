@@ -17,6 +17,10 @@ function applyThemeToDocument(resolved: ResolvedTheme): void {
   const root = document.documentElement;
   root.classList.remove('light', 'dark');
   root.classList.add(resolved);
+
+  // Update color-scheme so native browser widgets (scrollbars, form
+  // controls) match the chosen theme.
+  root.style.colorScheme = resolved;
 }
 
 interface ThemeProviderProps {
