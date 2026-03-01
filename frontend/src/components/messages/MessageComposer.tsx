@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import { CharacterCounter } from '@/components/ui/character-counter';
 import { Globe, Lock } from 'lucide-react';
 import { LIMITS } from '@/config/limits';
 
@@ -156,9 +156,7 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
                   </span>
                 )}
               </div>
-              <Badge variant={remainingChars < 0 ? 'destructive' : remainingChars < 50 ? 'secondary' : 'outline'}>
-                {remainingChars}
-              </Badge>
+              <CharacterCounter current={content.length} max={maxLength} />
             </div>
           </div>
 
