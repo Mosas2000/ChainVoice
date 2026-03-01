@@ -14,12 +14,15 @@ export function ThemeToggle() {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
   };
 
+  const label = resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+
   return (
     <Button
       variant="ghost"
       size="icon"
       onClick={toggle}
-      aria-label={`Switch to ${resolvedTheme === 'dark' ? 'light' : 'dark'} mode`}
+      aria-label={label}
+      title={label}
     >
       {resolvedTheme === 'dark' ? (
         <Sun className="h-5 w-5" />
