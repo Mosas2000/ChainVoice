@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { createProfile, updateProfile } from '@/services/profiles';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { CharacterCounter } from '@/components/ui/character-counter';
 import { LIMITS } from '@/config/limits';
+import { validateUsername } from '@/lib/validateUsername';
 import type { Profile } from '@/types';
 
 interface ProfileFormProps {
@@ -21,6 +22,8 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
   const [avatarUrl, setAvatarUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const usernameValidation = useMemo(() => validateUsername(username), [username]);
 
   useEffect(() => {
     if (existingProfile) {
