@@ -50,13 +50,16 @@
   }
   body {
     @apply bg-background text-foreground;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 
-/* Respect motion preferences — replace the pulse animation with a
-   static muted background so skeleton screens are still visible but
-   don't flash for users who find motion distracting or harmful. */
+/* Respect motion preferences — disable theme transition and skeleton
+   pulse for users who find animation distracting or harmful. */
 @media (prefers-reduced-motion: reduce) {
+  body {
+    transition: none;
+  }
   .animate-pulse {
     animation: none;
   }

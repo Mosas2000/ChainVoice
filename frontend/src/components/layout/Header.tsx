@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { MessageSquare } from 'lucide-react';
 
@@ -42,7 +43,8 @@ export function Header() {
           )}
         </div>
 
-        <div>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
           {isAuthenticated && userAddress ? (
             <div className="flex items-center gap-3">
               <span className="text-sm text-muted-foreground">
