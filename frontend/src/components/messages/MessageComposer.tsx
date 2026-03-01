@@ -164,7 +164,7 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
           </div>
 
           {error && (
-            <div className="bg-destructive/15 text-destructive text-sm p-3 rounded-md">
+            <div role="alert" className="bg-destructive/15 text-destructive text-sm p-3 rounded-md">
               {error}
             </div>
           )}
