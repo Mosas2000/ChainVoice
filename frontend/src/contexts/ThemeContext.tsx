@@ -60,6 +60,19 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
     setStoredTheme(next);
   }, []);
 
+  // Keyboard shortcut: Ctrl+Shift+L toggles dark/light
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'L') {
+        e.preventDefault();
+        setTheme(resolveTheme(theme) === 'dark' ? 'light' : 'dark');
+      }
+    };
+
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [theme, setTheme]);
+
   return (
     <ThemeContext.Provider value={{ theme, resolvedTheme: resolved, setTheme }}>
       {children}
