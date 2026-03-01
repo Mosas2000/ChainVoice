@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useMessages } from '@/hooks/useMessages';
 import { MessageCard } from './MessageCard';
-import { MessageFeedSkeleton } from './MessageFeedSkeleton';
+import { MessageFeedSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { RefreshCw } from 'lucide-react';

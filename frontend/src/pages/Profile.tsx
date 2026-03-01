@@ -4,7 +4,7 @@ import { useProfile } from '@/hooks/useProfile';
 import { getUserStats, isFollowing } from '@/services/profiles';
 import { ProfileForm } from '@/components/profile/ProfileForm';
 import { ProfileCard } from '@/components/profile/ProfileCard';
-import { ProfilePageSkeleton } from '@/components/profile/ProfilePageSkeleton';
+import { ProfilePageSkeleton } from '@/components/skeletons';
 import { MessageFeed } from '@/components/messages/MessageFeed';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
