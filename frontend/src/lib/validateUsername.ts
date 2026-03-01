@@ -24,10 +24,15 @@ export interface UsernameValidation {
 /**
  * Validate a username against the contract rules and UX conventions.
  *
- *  - Must be ASCII only (string-ascii in Clarity)
- *  - 3–50 characters
- *  - Lowercase alphanumeric, underscores, hyphens only
- *  - Cannot start or end with a hyphen or underscore
+ * Rules enforced:
+ *  1. Must be printable ASCII only (string-ascii in Clarity)
+ *  2. 3–50 characters long
+ *  3. Lowercase only — input is auto-lowercased in the form
+ *  4. Alphanumeric, underscores, hyphens only
+ *  5. Cannot start or end with a hyphen/underscore
+ *  6. No consecutive hyphens/underscores
+ *
+ * Returns `{ valid: true, error: null }` on success, or a human-readable error.
  */
 export function validateUsername(value: string): UsernameValidation {
   if (value.length === 0) {
