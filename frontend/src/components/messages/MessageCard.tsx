@@ -87,6 +87,7 @@ export function MessageCard({
   const displayName = authorUsername || formatAddress(message.author);
 
   return (
+    <article aria-label={`Message from ${displayName}`}>
     <Card>
       <CardContent className="pt-6">
         <div className="space-y-3">
@@ -102,9 +103,12 @@ export function MessageCard({
               <div>
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-sm">{displayName}</span>
-                  <span className="text-xs text-muted-foreground">
+                  <time
+                    dateTime={new Date(message.timestamp).toISOString()}
+                    className="text-xs text-muted-foreground"
+                  >
                     {formatDate(message.timestamp)}
-                  </span>
+                  </time>
                 </div>
                 <div className="text-xs text-muted-foreground">
                   {formatAddress(message.author)}
@@ -139,23 +143,26 @@ export function MessageCard({
               onClick={handleLikeToggle}
               disabled={loading || !isAuthenticated}
               className={hasLiked ? 'text-red-500 hover:text-red-600' : ''}
+              aria-label={hasLiked ? `Unlike message (${likeCount} likes)` : `Like message (${likeCount} likes)`}
+              aria-pressed={hasLiked}
             >
               <Heart className={`h-4 w-4 mr-1 ${hasLiked ? 'fill-current' : ''}`} />
               <span>{likeCount}</span>
             </Button>
-            <Button variant="ghost" size="sm" disabled>
+            <Button variant="ghost" size="sm" disabled aria-label="Reply to message">
               <MessageCircle className="h-4 w-4 mr-1" />
               <span>Reply</span>
             </Button>
           </div>
 
           {error && (
-            <div className="bg-destructive/15 text-destructive text-xs p-2 rounded-md">
+            <div role="alert" className="bg-destructive/15 text-destructive text-xs p-2 rounded-md">
               {error}
             </div>
           )}
         </div>
       </CardContent>
     </Card>
+    </article>
   );
 }
