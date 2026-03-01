@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { MessageSquare } from 'lucide-react';
+import { ExternalLink } from '@/components/ui/external-link';
+import { EXTERNAL_LINKS } from '@/config/links';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -33,33 +35,44 @@ export function Footer() {
           <div className="space-y-3">
             <h4 className="text-sm font-semibold">Resources</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <a
-                href="https://github.com/Mosas2000/ChainVoice"
-                target="_blank"
-                rel="noopener noreferrer"
+              <ExternalLink
+                href={EXTERNAL_LINKS.github}
                 className="hover:text-foreground transition-colors"
               >
                 GitHub
-              </a>
-              <a
-                href="https://docs.stacks.co"
-                target="_blank"
-                rel="noopener noreferrer"
+              </ExternalLink>
+              <ExternalLink
+                href={EXTERNAL_LINKS.stacksDocs}
                 className="hover:text-foreground transition-colors"
               >
                 Stacks Docs
-              </a>
+              </ExternalLink>
+              <ExternalLink
+                href={EXTERNAL_LINKS.stacksExplorer}
+                className="hover:text-foreground transition-colors"
+              >
+                Stacks Explorer
+              </ExternalLink>
             </nav>
           </div>
 
-          {/* Tech */}
+          {/* Wallets */}
           <div className="space-y-3">
-            <h4 className="text-sm font-semibold">Built With</h4>
-            <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <span>Clarity Smart Contracts</span>
-              <span>Stacks Blockchain</span>
-              <span>React + TypeScript</span>
-            </div>
+            <h4 className="text-sm font-semibold">Wallets</h4>
+            <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
+              <ExternalLink
+                href={EXTERNAL_LINKS.leatherWallet}
+                className="hover:text-foreground transition-colors"
+              >
+                Leather
+              </ExternalLink>
+              <ExternalLink
+                href={EXTERNAL_LINKS.xverseWallet}
+                className="hover:text-foreground transition-colors"
+              >
+                Xverse
+              </ExternalLink>
+            </nav>
           </div>
         </div>
 

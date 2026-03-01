@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { ExternalLink } from '@/components/ui/external-link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MessageSquare, Shield, Wallet, Zap } from 'lucide-react';
+import { MessageSquare, Shield, Wallet, Zap, Github } from 'lucide-react';
+import { EXTERNAL_LINKS } from '@/config/links';
 
 export function Home() {
   return (
@@ -23,15 +25,12 @@ export function Home() {
               Get Started
             </Button>
           </Link>
-          <a
-            href="https://github.com/yourusername/chainvoice"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <ExternalLink href={EXTERNAL_LINKS.github} label="ChainVoice on GitHub">
             <Button size="lg" variant="outline">
+              <Github className="h-4 w-4 mr-2" />
               View on GitHub
             </Button>
-          </a>
+          </ExternalLink>
         </div>
       </div>
 
@@ -93,7 +92,23 @@ export function Home() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Use Leather, Xverse, or any Stacks wallet to connect to ChainVoice.
+                Use{' '}
+                <ExternalLink
+                  href={EXTERNAL_LINKS.leatherWallet}
+                  className="underline hover:text-foreground"
+                  label="Leather wallet"
+                >
+                  Leather
+                </ExternalLink>
+                ,{' '}
+                <ExternalLink
+                  href={EXTERNAL_LINKS.xverseWallet}
+                  className="underline hover:text-foreground"
+                  label="Xverse wallet"
+                >
+                  Xverse
+                </ExternalLink>
+                , or any Stacks wallet to connect to ChainVoice.
                 No email or personal information required.
               </p>
             </CardContent>
