@@ -116,6 +116,9 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
           <div>
             <label htmlFor="bio" className="block text-sm font-medium mb-1">
               Bio
+              <span className="text-xs text-muted-foreground font-normal ml-2">
+                ASCII characters only
+              </span>
             </label>
             <Textarea
               id="bio"
