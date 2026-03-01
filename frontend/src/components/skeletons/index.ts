@@ -8,4 +8,5 @@ export { MessageCardSkeleton } from '@/components/messages/MessageCardSkeleton';
 export { MessageFeedSkeleton } from '@/components/messages/MessageFeedSkeleton';
 export { FeedPageSkeleton } from '@/components/messages/FeedPageSkeleton';
 export { ProfileCardSkeleton } from '@/components/profile/ProfileCardSkeleton';
+export { ProfileFormSkeleton } from '@/components/profile/ProfileFormSkeleton';
 export { ProfilePageSkeleton } from '@/components/profile/ProfilePageSkeleton';
