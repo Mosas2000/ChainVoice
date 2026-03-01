@@ -50,12 +50,17 @@ export function Header() {
               <span className="text-sm text-muted-foreground">
                 {formatAddress(userAddress)}
               </span>
-              <Button onClick={disconnectWallet} variant="outline" size="sm">
+              <Button
+                onClick={disconnectWallet}
+                variant="outline"
+                size="sm"
+                aria-label="Disconnect wallet"
+              >
                 Disconnect
               </Button>
             </div>
           ) : (
-            <Button onClick={connectWallet} size="sm">
+            <Button onClick={connectWallet} size="sm" aria-label="Connect your Stacks wallet">
               Connect Wallet
             </Button>
           )}
