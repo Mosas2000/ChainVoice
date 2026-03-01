@@ -101,6 +101,7 @@ export function ProfileCard({
                 disabled={loading}
                 variant={followInfo?.isFollowing ? 'outline' : 'default'}
                 size="sm"
+                aria-label={followInfo?.isFollowing ? `Unfollow ${displayName}` : `Follow ${displayName}`}
               >
                 {loading ? 'Loading...' : followInfo?.isFollowing ? 'Unfollow' : 'Follow'}
               </Button>
