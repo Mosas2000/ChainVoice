@@ -140,11 +140,13 @@ export function MessageCard({
               onClick={handleLikeToggle}
               disabled={loading || !isAuthenticated}
               className={hasLiked ? 'text-red-500 hover:text-red-600' : ''}
+              aria-label={hasLiked ? `Unlike message (${likeCount} likes)` : `Like message (${likeCount} likes)`}
+              aria-pressed={hasLiked}
             >
               <Heart className={`h-4 w-4 mr-1 ${hasLiked ? 'fill-current' : ''}`} />
               <span>{likeCount}</span>
             </Button>
-            <Button variant="ghost" size="sm" disabled>
+            <Button variant="ghost" size="sm" disabled aria-label="Reply to message">
               <MessageCircle className="h-4 w-4 mr-1" />
               <span>Reply</span>
             </Button>
