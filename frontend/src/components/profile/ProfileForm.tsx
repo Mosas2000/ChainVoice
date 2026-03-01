@@ -176,6 +176,9 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
           <div>
             <label htmlFor="avatarUrl" className="block text-sm font-medium mb-1">
               Avatar URL
+              <span className="text-xs text-muted-foreground font-normal ml-2">
+                ASCII characters only · max {LIMITS.avatarUrl.max}
+              </span>
             </label>
             <Input
               id="avatarUrl"
