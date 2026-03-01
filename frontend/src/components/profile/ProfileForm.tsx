@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { CharacterCounter } from '@/components/ui/character-counter';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import { LIMITS } from '@/config/limits';
-import { validateUsername } from '@/lib/validateUsername';
+import { validateUsername, isAscii } from '@/lib/validateUsername';
 import type { Profile } from '@/types';
 
 interface ProfileFormProps {
@@ -48,6 +48,11 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
 
     if (bio.length > LIMITS.bio.max) {
       setError(`Bio must be ${LIMITS.bio.max} characters or fewer`);
+      return;
+    }
+
+    if (bio.length > 0 && !isAscii(bio)) {
+      setError('Bio must contain only ASCII characters (the contract uses string-ascii)');
       return;
     }
 
