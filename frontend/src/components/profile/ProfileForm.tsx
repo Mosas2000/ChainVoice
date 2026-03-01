@@ -102,16 +102,23 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
               required
               minLength={LIMITS.username.min}
               maxLength={LIMITS.username.max}
-              className={username.length > LIMITS.username.max ? 'border-destructive' : ''}
+              className={
+                usernameValidation.error ? 'border-destructive' :
+                username.length > LIMITS.username.max ? 'border-destructive' : ''
+              }
             />
             <div className="flex items-center justify-between mt-1">
-              {existingProfile ? (
-                <p className="text-xs text-muted-foreground">
-                  Changing your username will release the old one
-                </p>
-              ) : (
-                <span />
-              )}
+              <div>
+                {usernameValidation.error ? (
+                  <p className="text-xs text-destructive">{usernameValidation.error}</p>
+                ) : existingProfile ? (
+                  <p className="text-xs text-muted-foreground">
+                    Changing your username will release the old one
+                  </p>
+                ) : username.length > 0 ? (
+                  <p className="text-xs text-green-600 dark:text-green-400">Username format looks good</p>
+                ) : null}
+              </div>
               <CharacterCounter current={username.length} max={LIMITS.username.max} />
             </div>
           </div>
