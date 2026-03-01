@@ -4,11 +4,12 @@ import { useProfile } from '@/hooks/useProfile';
 import { getUserStats, isFollowing } from '@/services/profiles';
 import { ProfileForm } from '@/components/profile/ProfileForm';
 import { ProfileCard } from '@/components/profile/ProfileCard';
+import { ProfilePageSkeleton } from '@/components/profile/ProfilePageSkeleton';
 import { MessageFeed } from '@/components/messages/MessageFeed';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { User, Loader2 } from 'lucide-react';
+import { User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { UserStats, FollowInfo } from '@/types';
 
@@ -75,18 +76,7 @@ export function Profile() {
   }
 
   if (profileLoading || statsLoading) {
-    return (
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <Card>
-          <CardContent className="flex items-center justify-center py-12">
-            <div className="text-center space-y-3">
-              <Loader2 className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
-              <p className="text-sm text-muted-foreground">Loading profile...</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    return <ProfilePageSkeleton />;
   }
 
   if (profileError) {
