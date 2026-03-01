@@ -155,7 +155,7 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
                   </span>
                 )}
               </div>
-              <CharacterCounter current={content.length} max={maxLength} />
+              <CharacterCounter current={content.length} max={maxLength} showBar />
             </div>
           </div>
 
