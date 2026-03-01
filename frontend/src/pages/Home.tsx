@@ -24,7 +24,7 @@ export function Home() {
             </Button>
           </Link>
           <a
-            href="https://github.com/yourusername/chainvoice"
+            href="https://github.com/Mosas2000/ChainVoice"
             target="_blank"
             rel="noopener noreferrer"
           >
