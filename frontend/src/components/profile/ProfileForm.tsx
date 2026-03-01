@@ -177,9 +177,9 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
             type="submit"
             disabled={
               loading ||
+              !usernameValidation.valid ||
               bio.length > LIMITS.bio.max ||
-              avatarUrl.length > LIMITS.avatarUrl.max ||
-              username.length > LIMITS.username.max
+              avatarUrl.length > LIMITS.avatarUrl.max
             }
             className="w-full"
           >
