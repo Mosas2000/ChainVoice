@@ -129,7 +129,11 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
               onChange={(e) => setAvatarUrl(e.target.value)}
               placeholder="https://..."
               type="url"
+              maxLength={LIMITS.avatarUrl.max}
             />
+            <div className="flex justify-end mt-1">
+              <CharacterCounter current={avatarUrl.length} max={LIMITS.avatarUrl.max} />
+            </div>
           </div>
 
           {error && (
