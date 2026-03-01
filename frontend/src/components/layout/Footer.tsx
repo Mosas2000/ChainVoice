@@ -56,14 +56,23 @@ export function Footer() {
             </nav>
           </div>
 
-          {/* Tech */}
+          {/* Wallets */}
           <div className="space-y-3">
-            <h4 className="text-sm font-semibold">Built With</h4>
-            <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <span>Clarity Smart Contracts</span>
-              <span>Stacks Blockchain</span>
-              <span>React + TypeScript</span>
-            </div>
+            <h4 className="text-sm font-semibold">Wallets</h4>
+            <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
+              <ExternalLink
+                href={EXTERNAL_LINKS.leatherWallet}
+                className="hover:text-foreground transition-colors"
+              >
+                Leather
+              </ExternalLink>
+              <ExternalLink
+                href={EXTERNAL_LINKS.xverseWallet}
+                className="hover:text-foreground transition-colors"
+              >
+                Xverse
+              </ExternalLink>
+            </nav>
           </div>
         </div>
 
