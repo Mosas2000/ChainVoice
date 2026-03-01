@@ -12,6 +12,13 @@ interface ExternalLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement
 /**
  * Wrapper for outbound links.
  * Adds target="_blank", rel="noopener noreferrer", and an optional trailing icon.
+ *
+ * @example
+ * ```tsx
+ * <ExternalLink href={EXTERNAL_LINKS.github} showIcon>
+ *   View source code
+ * </ExternalLink>
+ * ```
  */
 export function ExternalLink({
   href,
