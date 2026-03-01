@@ -102,7 +102,7 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
             <Input
               id="username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value.toLowerCase())}
               placeholder="satoshi_nakamoto"
               required
               minLength={LIMITS.username.min}
