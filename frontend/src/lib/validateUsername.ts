@@ -8,7 +8,7 @@ import { LIMITS } from '@/config/limits';
 const USERNAME_PATTERN = /^[a-z0-9_-]+$/;
 
 /** Returns true when every character is in the printable ASCII range (32–126). */
-function isAscii(value: string): boolean {
+export function isAscii(value: string): boolean {
   for (let i = 0; i < value.length; i++) {
     const code = value.charCodeAt(i);
     if (code < 32 || code > 126) return false;
