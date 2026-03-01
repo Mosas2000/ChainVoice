@@ -67,7 +67,7 @@ export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
         </Button>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-4" aria-live="polite">
         {messages.map((message) => (
           <MessageCard
             key={message.id}
