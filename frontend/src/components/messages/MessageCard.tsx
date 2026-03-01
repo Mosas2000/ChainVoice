@@ -156,7 +156,7 @@ export function MessageCard({
           </div>
 
           {error && (
-            <div className="bg-destructive/15 text-destructive text-xs p-2 rounded-md">
+            <div role="alert" className="bg-destructive/15 text-destructive text-xs p-2 rounded-md">
               {error}
             </div>
           )}
