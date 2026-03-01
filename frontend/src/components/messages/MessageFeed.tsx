@@ -26,7 +26,7 @@ export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
     return (
       <Card>
         <CardContent className="py-12">
-          <div className="text-center space-y-3">
+          <div role="alert" className="text-center space-y-3">
             <p className="text-sm text-destructive">Failed to load messages</p>
             <p className="text-xs text-muted-foreground">{error}</p>
             <Button onClick={refetch} variant="outline" size="sm">
@@ -62,7 +62,7 @@ export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
         <h2 className="text-lg font-semibold">
           {authorAddress ? 'Messages' : 'Recent Messages'}
         </h2>
-        <Button onClick={refetch} variant="ghost" size="sm" disabled={loading}>
+        <Button onClick={refetch} variant="ghost" size="sm" disabled={loading} aria-label="Refresh messages">
           <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
         </Button>
       </div>
