@@ -77,10 +77,12 @@ export async function removeReaction(
 
 export async function getMessage(messageId: number): Promise<Message | null> {
   // TODO: Implement read-only function call
+  // Return a realistic burn block height rather than Date.now() so the
+  // Timestamp component exercises its block-height conversion path.
   return {
     author: 'address',
     content: 'Sample message',
-    timestamp: Date.now(),
+    timestamp: 883_120,
     isPublic: true,
   };
 }

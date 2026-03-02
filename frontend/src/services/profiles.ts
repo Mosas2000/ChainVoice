@@ -74,9 +74,12 @@ export async function unfollowUser(userToUnfollow: string): Promise<void> {
 
 export async function getProfile(userAddress: string): Promise<Profile | null> {
   // TODO: Implement read-only function call
+  // Return a realistic burn block height (≈ block 882 500) rather
+  // than Date.now() so the Timestamp component exercises its
+  // block-height conversion path.
   return {
     username: 'user',
-    createdAt: Date.now(),
+    createdAt: 882_500,
   };
 }
 
