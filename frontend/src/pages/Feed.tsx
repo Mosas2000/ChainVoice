@@ -34,13 +34,12 @@ export function Feed() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <div className="space-y-6">
-        {/* Page Header */}
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Feed</h1>
-          <p className="text-muted-foreground">
-            Share your thoughts and see what others are saying
+      <div className="container mx-auto px-4 py-6 md:py-8 max-w-4xl">
+        <div className="space-y-4 md:space-y-6">
+          {/* Page Header */}
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold mb-1 md:mb-2">Feed</h1>
+            <p className="text-sm md:text-base text-muted-foreground">
           </p>
         </div>
 
