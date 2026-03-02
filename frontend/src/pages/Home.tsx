@@ -35,7 +35,7 @@ export function Home() {
       </div>
 
       {/* Features Section */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 py-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 py-8 md:py-12">
         <Card>
           <CardHeader>
             <Shield className="h-8 w-8 text-primary mb-2" />
@@ -78,13 +78,13 @@ export function Home() {
       </div>
 
       {/* How It Works Section */}
-      <div className="py-12 space-y-8">
+      <div className="py-8 md:py-12 space-y-8">
         <div className="text-center space-y-2">
-          <h2 className="text-3xl font-bold">How It Works</h2>
+          <h2 className="text-2xl md:text-3xl font-bold">How It Works</h2>
           <p className="text-muted-foreground">Get started in three simple steps</p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           <Card>
             <CardHeader>
               <Badge className="w-fit mb-2">Step 1</Badge>
@@ -143,12 +143,12 @@ export function Home() {
       </div>
 
       {/* CTA Section */}
-      <div className="py-12">
+      <div className="py-8 md:py-12">
         <Card className="bg-primary text-primary-foreground">
-          <CardContent className="py-12">
+          <CardContent className="py-8 md:py-12">
             <div className="text-center space-y-4">
-              <h2 className="text-3xl font-bold">Ready to Own Your Voice?</h2>
-              <p className="text-lg opacity-90 max-w-xl mx-auto">
+              <h2 className="text-2xl md:text-3xl font-bold">Ready to Own Your Voice?</h2>
+              <p className="text-base md:text-lg opacity-90 max-w-xl mx-auto">
                 Join the decentralized social revolution. Connect your wallet and
                 start sharing your thoughts on ChainVoice today.
               </p>
