@@ -1,14 +1,16 @@
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { HighlightMatch } from './HighlightMatch';
 import { User } from 'lucide-react';
 import type { ProfileSearchResult } from '@/types/search';
 
 interface SearchResultCardProps {
   profile: ProfileSearchResult;
+  query?: string;
 }
 
-export function SearchResultCard({ profile }: SearchResultCardProps) {
+export function SearchResultCard({ profile, query = '' }: SearchResultCardProps) {
   const formatAddress = (address: string) =>
     `${address.slice(0, 6)}...${address.slice(-4)}`;
 
@@ -40,14 +42,16 @@ export function SearchResultCard({ profile }: SearchResultCardProps) {
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-sm truncate">{profile.username}</span>
+              <span className="font-semibold text-sm truncate">
+                <HighlightMatch text={profile.username} query={query} />
+              </span>
               <span className="text-xs text-muted-foreground shrink-0">
                 {formatAddress(profile.address)}
               </span>
             </div>
             {profile.bio && (
               <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
-                {profile.bio}
+                <HighlightMatch text={profile.bio} query={query} />
               </p>
             )}
           </div>

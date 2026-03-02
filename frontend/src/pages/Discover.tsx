@@ -52,7 +52,7 @@ export function Discover() {
                 {results.length} {results.length === 1 ? 'result' : 'results'} found
               </p>
               {results.map((profile) => (
-                <SearchResultCard key={profile.address} profile={profile} />
+                <SearchResultCard key={profile.address} profile={profile} query={query} />
               ))}
             </div>
           )}
