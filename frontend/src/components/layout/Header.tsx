@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { useRouteChange } from '@/hooks/useRouteChange';
 import { BREAKPOINTS } from '@/config/breakpoints';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { MobileNav } from '@/components/layout/MobileNav';
@@ -21,6 +22,9 @@ export function Header() {
   const closeMobileMenu = useCallback(() => {
     setMobileMenuOpen(false);
   }, []);
+
+  // Auto-close the mobile drawer on any route change
+  useRouteChange(closeMobileMenu);
 
   const formatAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
