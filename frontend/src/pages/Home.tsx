@@ -10,23 +10,23 @@ export function Home() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       {/* Hero Section */}
-      <div className="text-center space-y-6 py-12">
+      <div className="text-center space-y-6 py-8 md:py-12">
         <div className="flex items-center justify-center gap-2 mb-4">
-          <MessageSquare className="h-12 w-12 text-primary" />
-          <h1 className="text-5xl font-bold">ChainVoice</h1>
+          <MessageSquare className="h-8 w-8 md:h-12 md:w-12 text-primary" />
+          <h1 className="text-3xl md:text-5xl font-bold">ChainVoice</h1>
         </div>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto">
           A decentralized social platform built on Stacks blockchain.
           Own your voice, control your data, connect with authenticity.
         </p>
-        <div className="flex items-center justify-center gap-4 pt-4">
-          <Link to="/feed">
-            <Button size="lg">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-4">
+          <Link to="/feed" className="w-full sm:w-auto">
+            <Button size="lg" className="w-full sm:w-auto">
               Get Started
             </Button>
           </Link>
-          <ExternalLink href={EXTERNAL_LINKS.github} label="ChainVoice on GitHub">
-            <Button size="lg" variant="outline">
+          <ExternalLink href={EXTERNAL_LINKS.github} label="ChainVoice on GitHub" className="w-full sm:w-auto">
+            <Button size="lg" variant="outline" className="w-full sm:w-auto">
               <Github className="h-4 w-4 mr-2" />
               View on GitHub
             </Button>
