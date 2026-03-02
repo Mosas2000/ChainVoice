@@ -7,6 +7,7 @@ import { Footer } from '@/components/layout/Footer';
 import { Home } from '@/pages/Home';
 import { Feed } from '@/pages/Feed';
 import { Profile } from '@/pages/Profile';
+import { Discover } from '@/pages/Discover';
 import { NotFound } from '@/pages/NotFound';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/feed" element={<Feed />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/discover" element={<Discover />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <Footer />
