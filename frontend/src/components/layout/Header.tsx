@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
@@ -25,6 +25,13 @@ export function Header() {
 
   // Auto-close the mobile drawer on any route change
   useRouteChange(closeMobileMenu);
+
+  // Close drawer if the viewport expands past the mobile breakpoint
+  useEffect(() => {
+    if (isDesktop) {
+      setMobileMenuOpen(false);
+    }
+  }, [isDesktop]);
 
   const formatAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
