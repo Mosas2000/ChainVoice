@@ -15,7 +15,8 @@ interface SearchInputProps {
 /**
  * Styled search input with a leading search icon, clear button, and
  * optional loading spinner. Wraps the base Input component with
- * search-specific affordances.
+ * search-specific affordances. Shows a keyboard shortcut hint when
+ * the field is empty and not focused.
  */
 export function SearchInput({
   value,
@@ -33,6 +34,9 @@ export function SearchInput({
     }
   }, [autoFocus]);
 
+  const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.userAgent);
+  const shortcutLabel = isMac ? '⌘K' : 'Ctrl+K';
+
   return (
     <div className="relative">
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
@@ -47,7 +51,7 @@ export function SearchInput({
         autoComplete="off"
         spellCheck={false}
       />
-      {/* Show spinner while loading, clear button when there is text */}
+      {/* Show spinner while loading, clear button when there is text, shortcut hint when empty */}
       {loading ? (
         <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground animate-spin" />
       ) : value.length > 0 ? (
@@ -61,7 +65,11 @@ export function SearchInput({
         >
           <X className="h-4 w-4" />
         </Button>
-      ) : null}
+      ) : (
+        <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:inline-flex items-center gap-1 rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground pointer-events-none">
+          {shortcutLabel}
+        </kbd>
+      )}
     </div>
   );
 }
