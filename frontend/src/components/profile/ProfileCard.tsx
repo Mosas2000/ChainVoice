@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Profile, UserStats, FollowInfo } from '@/types';
+import { Timestamp } from '@/components/ui/timestamp';
 import { Calendar, User } from 'lucide-react';
 
 interface ProfileCardProps {
@@ -62,13 +63,7 @@ export function ProfileCard({
       .slice(0, 2);
   };
 
-  const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
+
 
   const displayName = profile.username;
 
@@ -117,7 +112,7 @@ export function ProfileCard({
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
             <Calendar className="h-4 w-4" />
-            <span>Joined {formatDate(profile.createdAt)}</span>
+            <span>Joined <Timestamp value={profile.createdAt} format="long" showBlockHeight /></span>
           </div>
         </div>
 
