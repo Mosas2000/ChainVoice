@@ -34,6 +34,11 @@ export const BLOCK_HEIGHT_ANCHOR = {
  * is unreasonably large to be a block height).
  */
 export function blockHeightToTimestamp(blockHeight: number): number {
+  // Guard against obviously invalid values
+  if (!Number.isFinite(blockHeight) || blockHeight < 0) {
+    return Date.now();
+  }
+
   // If the value is already in the Unix-ms range (> 1e12), assume it
   // was already converted by the caller or came from a stub service
   if (blockHeight > 1e12) {
@@ -50,7 +55,11 @@ export function blockHeightToTimestamp(blockHeight: number): number {
   const estimatedSeconds =
     BLOCK_HEIGHT_ANCHOR.timestampSeconds + blockDiff * AVERAGE_BLOCK_TIME_SECONDS;
 
-  return estimatedSeconds * 1000;
+  // Clamp to a sane range: no earlier than the Unix epoch and no
+  // later than approximately the year 2100
+  const clampedSeconds = Math.max(0, Math.min(estimatedSeconds, 4_102_444_800));
+
+  return clampedSeconds * 1000;
 }
 
 /**
@@ -59,5 +68,5 @@ export function blockHeightToTimestamp(blockHeight: number): number {
  * hundreds of thousands, while Unix timestamps are in the billions.
  */
 export function isBlockHeight(value: number): boolean {
-  return value > 0 && value < 1e9;
+  return Number.isFinite(value) && value > 0 && value < 1e9;
 }
