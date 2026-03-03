@@ -11,7 +11,7 @@ interface MessageFeedProps {
 }
 
 export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
-  const { messages, loading, error, refetch } = useMessages(limit, authorAddress);
+  const { messages, loading, refreshing, error, refetch } = useMessages(limit, authorAddress);
 
   if (loading && messages.length === 0) {
     return <MessageFeedSkeleton />;
@@ -57,8 +57,8 @@ export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
         <h2 className="text-lg font-semibold">
           {authorAddress ? 'Messages' : 'Recent Messages'}
         </h2>
-        <Button onClick={refetch} variant="ghost" size="sm" disabled={loading} aria-label="Refresh messages">
-          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+        <Button onClick={refetch} variant="ghost" size="sm" disabled={loading || refreshing} aria-label="Refresh messages">
+          <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
         </Button>
       </div>
 
