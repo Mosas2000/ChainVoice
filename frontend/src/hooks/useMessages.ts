@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { getMessage, getMessageCount, getMessagesPage, getLatestMessagesInfo } from '../services/messages';
+import { getMessage, getMessageCount, getLatestMessagesInfo } from '../services/messages';
 import type { Message } from '../types';
 
 export const useMessages = (limit: number = 20, authorAddress?: string) => {
