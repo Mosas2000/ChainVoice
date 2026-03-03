@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useMessages } from '@/hooks/useMessages';
+import { useOptimistic } from '@/contexts/OptimisticContext';
 import { MessageCard } from './MessageCard';
+import { OptimisticMessageCard } from './OptimisticMessageCard';
 import { MessageFeedSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,6 +15,19 @@ interface MessageFeedProps {
 
 export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
   const { messages, loading, error, refetch } = useMessages(limit, authorAddress);
+  const { messages: optimisticMessages } = useOptimistic();
+
+  // Only show optimistic entries that belong to this feed view.
+  // If viewing a specific author's messages, only show their optimistic entries.
+  const visibleOptimistic = optimisticMessages.filter((entry) => {
+    if (authorAddress) {
+      return entry.author === authorAddress;
+    }
+    // On the global feed, show all public optimistic messages.
+    return entry.isPublic;
+  });
+
+  const hasContent = messages.length > 0 || visibleOptimistic.length > 0;
 
   useEffect(() => {
     refetch();
@@ -39,7 +54,7 @@ export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
     );
   }
 
-  if (messages.length === 0) {
+  if (!hasContent && !loading) {
     return (
       <Card>
         <CardContent className="py-12">
@@ -68,6 +83,9 @@ export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
       </div>
 
       <div className="space-y-4" aria-live="polite">
+        {visibleOptimistic.map((entry) => (
+          <OptimisticMessageCard key={entry.localId} entry={entry} />
+        ))}
         {messages.map((message) => (
           <MessageCard
             key={message.id}
