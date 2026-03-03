@@ -21,11 +21,11 @@ export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
     return (
       <Card>
         <CardContent className="py-12">
-          <div role="alert" className="text-center space-y-3">
+          <div role="alert" aria-live="assertive" className="text-center space-y-3">
             <p className="text-sm text-destructive">Failed to load messages</p>
             <p className="text-xs text-muted-foreground">{error}</p>
-            <Button onClick={refetch} variant="outline" size="sm">
-              <RefreshCw className="h-4 w-4 mr-2" />
+            <Button onClick={refetch} variant="outline" size="sm" disabled={refreshing}>
+              <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
               Try Again
             </Button>
           </div>
