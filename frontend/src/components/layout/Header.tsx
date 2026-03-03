@@ -10,10 +10,10 @@ import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { MobileNav } from '@/components/layout/MobileNav';
 import { HamburgerIcon } from '@/components/layout/HamburgerIcon';
 import { Button } from '@/components/ui/button';
-import { MessageSquare, Loader2 } from 'lucide-react';
+import { MessageSquare, Loader2, X } from 'lucide-react';
 
 export function Header() {
-  const { isAuthenticated, userAddress, connecting, connectWallet, disconnectWallet } = useAuth();
+  const { isAuthenticated, userAddress, connecting, connectionError, clearConnectionError, connectWallet, disconnectWallet } = useAuth();
   const { pendingCount } = useTransactions();
   const isDesktop = useMediaQuery(BREAKPOINTS.md);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -146,6 +146,23 @@ export function Header() {
           </div>
         </div>
       </header>
+
+      {/* Connection error banner */}
+      {connectionError && (
+        <div
+          role="alert"
+          className="sticky top-16 z-40 flex items-center justify-between gap-2 border-b bg-destructive/10 px-4 py-2 text-sm text-destructive"
+        >
+          <p>{connectionError}</p>
+          <button
+            onClick={clearConnectionError}
+            className="shrink-0 rounded-sm p-0.5 hover:bg-destructive/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label="Dismiss error"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
 
       {/* Mobile navigation drawer — rendered outside header for overlay stacking */}
       {!isDesktop && <MobileNav open={mobileMenuOpen} onClose={closeMobileMenu} />}
