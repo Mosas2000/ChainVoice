@@ -50,6 +50,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkAuth();
   };
 
+  // Auto-dismiss the connection error after 10 seconds
+  useEffect(() => {
+    if (!connectionError) return;
+    const timer = setTimeout(() => setConnectionError(null), 10_000);
+    return () => clearTimeout(timer);
+  }, [connectionError]);
+
   useEffect(() => {
     if (userSession.isSignInPending()) {
       userSession.handlePendingSignIn().then(() => {
