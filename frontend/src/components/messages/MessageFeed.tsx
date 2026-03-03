@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useMessages } from '@/hooks/useMessages';
 import { MessageCard } from './MessageCard';
+import { NewMessagesBanner } from './NewMessagesBanner';
 import { MessageFeedSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,10 +10,12 @@ import { RefreshCw } from 'lucide-react';
 interface MessageFeedProps {
   limit?: number;
   authorAddress?: string;
+  /** Polling interval in milliseconds.  Pass `null` to disable polling. */
+  pollInterval?: number | null;
 }
 
-export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
-  const { messages, loading, error, refetch } = useMessages(limit, authorAddress);
+export function MessageFeed({ limit = 20, authorAddress, pollInterval }: MessageFeedProps) {
+  const { messages, loading, error, newMessageCount, refetch, dismissNewMessages } = useMessages(limit, authorAddress, pollInterval);
 
   useEffect(() => {
     refetch();
@@ -66,6 +69,13 @@ export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
           <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
         </Button>
       </div>
+
+      {/* New messages banner */}
+      <NewMessagesBanner
+        count={newMessageCount}
+        onLoad={refetch}
+        onDismiss={dismissNewMessages}
+      />
 
       <div className="space-y-4" aria-live="polite">
         {messages.map((message) => (
