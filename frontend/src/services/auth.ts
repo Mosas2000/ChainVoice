@@ -2,10 +2,24 @@ import { AppConfig, UserSession, showConnect } from '@stacks/connect';
 import { APP_DETAILS, NETWORK } from '../config/contracts';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
+
+/** Shared session instance used across the application. */
 export const userSession = new UserSession({ appConfig });
 
-const WALLET_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes for the user to approve in wallet popup
+/**
+ * Maximum time (in ms) the app will wait for the user to finish
+ * approving the wallet popup before automatically rejecting.
+ */
+const WALLET_TIMEOUT_MS = 5 * 60 * 1000;
 
+/**
+ * Open the Stacks wallet popup and return a promise that resolves once
+ * the user approves the connection, or rejects if they cancel or if the
+ * interaction times out.
+ *
+ * @returns A promise that settles when the wallet interaction completes.
+ * @throws {Error} When the popup is cancelled, times out, or fails to open.
+ */
 export const connectWallet = (): Promise<void> => {
   return new Promise<void>((resolve, reject) => {
     const timer = setTimeout(() => {
@@ -33,6 +47,11 @@ export const connectWallet = (): Promise<void> => {
   });
 };
 
+/**
+ * Sign the user out of their wallet session and redirect to the home
+ * page.  This is intentionally a hard navigation so all in-memory
+ * state is flushed cleanly.
+ */
 export const disconnectWallet = (): void => {
   try {
     userSession.signUserOut();
@@ -42,6 +61,12 @@ export const disconnectWallet = (): void => {
   window.location.href = '/';
 };
 
+/**
+ * Read the signed-in user's STX address.  The address returned will
+ * correspond to the currently configured network (mainnet or testnet).
+ *
+ * @returns The STX address string, or `null` when no user is signed in.
+ */
 export const getUserAddress = (): string | null => {
   if (userSession.isUserSignedIn()) {
     const userData = userSession.loadUserData();
@@ -55,6 +80,10 @@ export const getUserAddress = (): string | null => {
   return null;
 };
 
+/**
+ * Check whether a user is currently signed in.  Returns `false` rather
+ * than throwing when the session data is corrupted or unreadable.
+ */
 export const isAuthenticated = (): boolean => {
   try {
     return userSession.isUserSignedIn();
