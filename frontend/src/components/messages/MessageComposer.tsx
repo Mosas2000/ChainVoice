@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   standardPrincipalCV,
   stringUtf8CV,
@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import { CharacterCounter } from '@/components/ui/character-counter';
 import { Globe, Lock } from 'lucide-react';
 import { LIMITS } from '@/config/limits';
+import { validateStxAddress } from '@/lib/validateAddress';
 
 interface MessageComposerProps {
   onSuccess?: () => void;
@@ -31,6 +32,11 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
   const [error, setError] = useState<string | null>(null);
 
   const maxLength = LIMITS.messageContent.max;
+
+  const recipientValidation = useMemo(
+    () => (!isPublic && recipient.length > 0 ? validateStxAddress(recipient) : { valid: true, error: null }),
+    [isPublic, recipient],
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,6 +57,11 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
 
     if (!isPublic && !recipient) {
       setError('Please enter a recipient address for direct messages');
+      return;
+    }
+
+    if (!isPublic && !recipientValidation.valid) {
+      setError(recipientValidation.error || 'Invalid recipient address');
       return;
     }
 
@@ -163,12 +174,19 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
               <Input
                 id="recipient"
                 value={recipient}
-                onChange={(e) => setRecipient(e.target.value)}
+                onChange={(e) => setRecipient(e.target.value.trim())}
                 placeholder="SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7"
                 required
                 disabled={!!recipientAddress}
-                className={recipientAddress ? 'bg-muted' : ''}
+                aria-invalid={!!recipientValidation.error}
+                aria-describedby="recipient-feedback"
+                className={recipientValidation.error ? 'border-destructive' : recipientAddress ? 'bg-muted' : ''}
               />
+              {recipientValidation.error && (
+                <p id="recipient-feedback" className="text-xs text-destructive mt-1">
+                  {recipientValidation.error}
+                </p>
+              )}
             </div>
           )}
 
@@ -208,7 +226,7 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
             </div>
           )}
 
-          <Button type="submit" disabled={loading || content.length === 0 || content.length > maxLength} className="w-full">
+          <Button type="submit" disabled={loading || content.length === 0 || content.length > maxLength || (!isPublic && !recipientValidation.valid)} className="w-full">
             {loading ? 'Sending...' : 'Send Message'}
           </Button>
         </form>
