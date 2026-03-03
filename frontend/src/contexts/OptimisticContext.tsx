@@ -69,6 +69,14 @@ function saveToStorage<T>(key: string, data: T[]): void {
   }
 }
 
+/** Entries older than this are considered stale and removed on mount. */
+const STALE_THRESHOLD_MS = 30 * 60 * 1000; // 30 minutes
+
+function pruneStale<T extends { createdAt: number }>(entries: T[]): T[] {
+  const cutoff = Date.now() - STALE_THRESHOLD_MS;
+  return entries.filter((e) => e.createdAt > cutoff);
+}
+
 // ────────────────────────────────────────────────
 // Provider
 // ────────────────────────────────────────────────
@@ -79,10 +87,10 @@ interface OptimisticProviderProps {
 
 export function OptimisticProvider({ children }: OptimisticProviderProps) {
   const [messages, setMessages] = useState<OptimisticMessage[]>(
-    () => loadFromStorage<OptimisticMessage>(STORAGE_KEY_MESSAGES),
+    () => pruneStale(loadFromStorage<OptimisticMessage>(STORAGE_KEY_MESSAGES)),
   );
   const [follows, setFollows] = useState<OptimisticFollow[]>(
-    () => loadFromStorage<OptimisticFollow>(STORAGE_KEY_FOLLOWS),
+    () => pruneStale(loadFromStorage<OptimisticFollow>(STORAGE_KEY_FOLLOWS)),
   );
 
   // Persist to sessionStorage whenever entries change.
