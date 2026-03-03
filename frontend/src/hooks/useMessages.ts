@@ -14,22 +14,33 @@ export const useMessages = (limit: number = 20, authorAddress?: string) => {
   const paramsRef = useRef({ limit, authorAddress, page });
   paramsRef.current = { limit, authorAddress, page };
 
+  // Track a monotonic fetch ID to discard results from stale requests.
+  const fetchIdRef = useRef(0);
+
   const fetchMessages = useCallback(async () => {
+    const id = ++fetchIdRef.current;
     const { limit: _limit } = paramsRef.current;
     setLoading(true);
     setError(null);
     try {
       const count = await getMessageCount();
+      // If a newer fetch was launched while we were waiting, bail out.
+      if (id !== fetchIdRef.current) return;
+
       setTotalCount(count);
 
       const pageInfo = await getLatestMessagesInfo(_limit);
-      setHasMore(pageInfo.hasMore);
+      if (id !== fetchIdRef.current) return;
 
+      setHasMore(pageInfo.hasMore);
       setMessages([]);
     } catch (err: any) {
+      if (id !== fetchIdRef.current) return;
       setError(err.message);
     } finally {
-      setLoading(false);
+      if (id === fetchIdRef.current) {
+        setLoading(false);
+      }
     }
   }, []);
 
