@@ -10,6 +10,7 @@ import type { Profile, UserStats, FollowInfo } from '@/types';
 import { Timestamp } from '@/components/ui/timestamp';
 import { Calendar, User } from 'lucide-react';
 import { getContractErrorMessage } from '@/lib/contractErrors';
+import { ErrorAlert } from '@/components/ui/error-alert';
 
 interface ProfileCardProps {
   profile: Profile;
@@ -152,9 +153,7 @@ export function ProfileCard({
         )}
 
         {error && (
-          <div role="alert" className="bg-destructive/15 text-destructive text-sm p-2 rounded-md">
-            {error}
-          </div>
+          <ErrorAlert message={error} onDismiss={() => setError(null)} />
         )}
       </CardContent>
     </Card>
