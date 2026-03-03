@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import { userSession, isAuthenticated, getUserAddress, connectWallet, disconnectWallet } from '../services/auth';
 
 interface AuthContextType {
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [connectionError, setConnectionError] = useState<string | null>(null);
   const [initializing, setInitializing] = useState(true);
 
-  const checkAuth = () => {
+  const checkAuth = useCallback(() => {
     const auth = isAuthenticated();
     setAuthenticated(auth);
     if (auth) {
@@ -30,9 +30,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } else {
       setUserAddress(null);
     }
-  };
+  }, []);
 
-  const handleConnectWallet = async () => {
+  const handleConnectWallet = useCallback(async () => {
     setConnecting(true);
     setConnectionError(null);
     try {
@@ -45,12 +45,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setConnecting(false);
     }
-  };
+  }, [checkAuth]);
 
-  const handleDisconnectWallet = () => {
+  const handleDisconnectWallet = useCallback(() => {
     disconnectWallet();
     checkAuth();
-  };
+  }, [checkAuth]);
+
+  const clearConnectionError = useCallback(() => setConnectionError(null), []);
 
   // Auto-dismiss the connection error after 10 seconds
   useEffect(() => {
@@ -82,7 +84,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       checkAuth,
       connectWallet: handleConnectWallet,
       disconnectWallet: handleDisconnectWallet,
-      clearConnectionError: () => setConnectionError(null),
+      clearConnectionError,
     }}>
       {children}
     </AuthContext.Provider>
