@@ -12,6 +12,7 @@ import { CheckCircle2, XCircle } from 'lucide-react';
 import { LIMITS } from '@/config/limits';
 import { validateUsername, isAscii } from '@/lib/validateUsername';
 import { getContractErrorMessage } from '@/lib/contractErrors';
+import { ErrorAlert } from '@/components/ui/error-alert';
 import type { Profile } from '@/types';
 
 interface ProfileFormProps {
@@ -217,9 +218,7 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
           </div>
 
           {error && (
-            <div className="bg-destructive/15 text-destructive text-sm p-3 rounded-md">
-              {error}
-            </div>
+            <ErrorAlert message={error} onDismiss={() => setError(null)} />
           )}
 
           <Button
