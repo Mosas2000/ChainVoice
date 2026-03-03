@@ -7,6 +7,18 @@
  * When a contract call fails, the Stacks SDK surfaces these codes inside
  * the error payload.  This module maps every known code to a friendly
  * message that can be shown directly to the user.
+ *
+ * @example
+ * ```ts
+ * import { getContractErrorMessage } from '@/lib/contractErrors';
+ *
+ * try {
+ *   await openContractCall(options);
+ * } catch (err) {
+ *   setError(getContractErrorMessage(err));
+ *   // e.g. "That username is already taken — please choose another."
+ * }
+ * ```
  */
 
 /**
