@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useMessages } from '@/hooks/useMessages';
 import { MessageCard } from './MessageCard';
 import { MessageFeedSkeleton } from '@/components/skeletons';
@@ -13,10 +12,6 @@ interface MessageFeedProps {
 
 export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
   const { messages, loading, error, refetch } = useMessages(limit, authorAddress);
-
-  useEffect(() => {
-    refetch();
-  }, [authorAddress, limit, refetch]);
 
   if (loading && messages.length === 0) {
     return <MessageFeedSkeleton />;
