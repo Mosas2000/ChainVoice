@@ -149,9 +149,9 @@ export function Header() {
         </div>
       </header>
 
-      {/* Connection error banner */}
+      {/* Connection error banner — aria-live so screen readers announce it */}
       {connectionError && (
-        <div role="alert" className="border-b bg-destructive/10 text-destructive">
+        <div role="alert" aria-live="assertive" className="border-b bg-destructive/10 text-destructive">
           <div className="container flex items-center justify-between py-2 text-sm">
             <span>{connectionError}</span>
             <button

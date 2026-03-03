@@ -23,7 +23,12 @@ export function WalletConnectionGuard({
 
   if (initializing) {
     return (
-      <div className="flex items-center justify-center py-16" aria-busy="true">
+      <div
+        className="flex items-center justify-center py-16"
+        role="status"
+        aria-busy="true"
+        aria-label="Checking wallet session"
+      >
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     );
