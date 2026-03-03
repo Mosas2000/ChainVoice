@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useLockBodyScroll } from '@/hooks/useLockBodyScroll';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
-import { MessageSquare, Home, Rss, User, LogOut, Wallet } from 'lucide-react';
+import { MessageSquare, Home, Rss, User, LogOut, Wallet, Loader2 } from 'lucide-react';
 
 interface MobileNavProps {
   open: boolean;
@@ -22,7 +22,7 @@ const NAV_LINKS = [
 export function MobileNav({ open, onClose }: MobileNavProps) {
   const drawerRef = useRef<HTMLDivElement>(null);
   const { pathname } = useLocation();
-  const { isAuthenticated, userAddress, connectWallet, disconnectWallet } = useAuth();
+  const { isAuthenticated, userAddress, connecting, connectWallet, disconnectWallet } = useAuth();
 
   // Lock body scroll while drawer is visible
   useLockBodyScroll(open);
@@ -139,10 +139,20 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
                 }}
                 size="sm"
                 className="w-full"
+                disabled={connecting}
                 aria-label="Connect your Stacks wallet"
               >
-                <Wallet className="h-4 w-4 mr-2" />
-                Connect Wallet
+                {connecting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Connecting…
+                  </>
+                ) : (
+                  <>
+                    <Wallet className="h-4 w-4 mr-2" />
+                    Connect Wallet
+                  </>
+                )}
               </Button>
             )}
           </div>
