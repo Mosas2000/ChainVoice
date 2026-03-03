@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { userSession, isAuthenticated, getUserAddress, connectWallet, disconnectWallet } from '../services/auth';
 
 interface AuthContextType {
@@ -15,6 +16,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const navigate = useNavigate();
   const [authenticated, setAuthenticated] = useState(false);
   const [userAddress, setUserAddress] = useState<string | null>(null);
   const [connecting, setConnecting] = useState(false);
@@ -51,8 +53,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const handleDisconnectWallet = useCallback(() => {
     disconnectWallet();
-    checkAuth();
-  }, [checkAuth]);
+    setAuthenticated(false);
+    setUserAddress(null);
+    setConnectionError(null);
+    navigate('/', { replace: true });
+  }, [navigate]);
 
   useEffect(() => {
     if (userSession.isSignInPending()) {

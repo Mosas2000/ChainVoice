@@ -48,9 +48,12 @@ export const connectWallet = (): Promise<void> => {
 };
 
 /**
- * Sign the user out of their wallet session and redirect to the home
- * page.  This is intentionally a hard navigation so all in-memory
- * state is flushed cleanly.
+ * Sign the user out of their wallet session.
+ *
+ * The previous implementation triggered a hard page reload via
+ * `window.location.href`.  This was moved into the calling code
+ * (AuthContext) so that callers who don't want a full navigation
+ * (e.g. tests) can sign out without side-effects.
  */
 export const disconnectWallet = (): void => {
   try {
@@ -58,7 +61,6 @@ export const disconnectWallet = (): void => {
   } catch {
     // signUserOut may throw if the session is already cleared; ignore.
   }
-  window.location.href = '/';
 };
 
 /**
