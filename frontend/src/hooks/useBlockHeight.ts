@@ -48,9 +48,11 @@ export function useBlockHeight(pollIntervalMs = 0): BlockHeightState {
 
         if (!cancelled) {
           setBlockHeight(height);
-          setE          setE          se  } catch (err) {
+          setError(null);
+        }
+      } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.mess          setErr fetch block height');
+          setError(err instanceof Error ? err.message : 'Failed to fetch block height');
         }
       } finally {
         if (!cancelled) {
@@ -62,7 +64,10 @@ export function useBlockHeight(pollIntervalMs = 0): BlockHeightState {
     fetchBlockHeight();
 
     if (pollIntervalMs > 0) {
-      const intervalId = setInterval(fetchBlockHeight, p      const intervalId = setInterval(fetchBlockHcelled = tru      const intervterval(intervalId);
+      const intervalId = setInterval(fetchBlockHeight, pollIntervalMs);
+      return () => {
+        cancelled = true;
+        clearInterval(intervalId);
       };
     }
 

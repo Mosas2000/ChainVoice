@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { searchProfiles } from '@/services/search';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
+import { getContractErrorMessage } from '@/lib/contractErrors';
 import type { ProfileSearchResult } from '@/types/search';
 
 interface UseSearchOptions {
@@ -70,7 +71,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Search failed');
+          setError(getContractErrorMessage(err));
           setResults([]);
         }
       } finally {
