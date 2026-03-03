@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useTransactions } from '@/contexts/TransactionContext';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useRouteChange } from '@/hooks/useRouteChange';
 import { useSearchShortcut } from '@/hooks/useSearchShortcut';
@@ -13,6 +14,7 @@ import { MessageSquare } from 'lucide-react';
 
 export function Header() {
   const { isAuthenticated, userAddress, connectWallet, disconnectWallet } = useAuth();
+  const { pendingCount } = useTransactions();
   const isDesktop = useMediaQuery(BREAKPOINTS.md);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -77,6 +79,17 @@ export function Header() {
                   className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
                   Profile
+                </Link>
+                <Link
+                  to="/transactions"
+                  className="relative text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  Transactions
+                  {pendingCount > 0 && (
+                    <span className="absolute -top-1.5 -right-3 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                      {pendingCount}
+                    </span>
+                  )}
                 </Link>
               </nav>
             )}

@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { standardPrincipalCV, PostConditionMode } from '@stacks/transactions';
 import { useAuth } from '@/contexts/AuthContext';
-import { followUser, unfollowUser } from '@/services/profiles';
+import { useTrackedContractCall } from '@/hooks/useTrackedContractCall';
+import { CONTRACTS, APP_DETAILS } from '@/config/contracts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -28,6 +30,7 @@ export function ProfileCard({
   onEdit,
 }: ProfileCardProps) {
   const { isAuthenticated, userAddress } = useAuth();
+  const trackedCall = useTrackedContractCall();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -41,12 +44,26 @@ export function ProfileCard({
     setError(null);
 
     try {
-      if (followInfo?.isFollowing) {
-        await unfollowUser(profileAddress);
-      } else {
-        await followUser(profileAddress);
+      const isUnfollow = followInfo?.isFollowing;
+      const functionName = isUnfollow ? 'unfollow-user' : 'follow-user';
+
+      const txId = await trackedCall({
+        contractCallOptions: {
+          contractAddress: CONTRACTS.profiles.address,
+          contractName: CONTRACTS.profiles.name,
+          functionName,
+          functionArgs: [standardPrincipalCV(profileAddress)],
+          network: CONTRACTS.network,
+          postConditionMode: PostConditionMode.Deny,
+          appDetails: APP_DETAILS,
+        },
+        action: isUnfollow ? 'unfollow' : 'follow',
+        description: profile.username,
+      });
+
+      if (txId) {
+        onFollowChange?.();
       }
-      onFollowChange?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update follow status');
     } finally {
