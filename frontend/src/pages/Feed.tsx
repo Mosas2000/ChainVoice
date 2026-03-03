@@ -1,6 +1,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { MessageComposer } from '@/components/messages/MessageComposer';
 import { MessageFeed } from '@/components/messages/MessageFeed';
+import { POLLING } from '@/config/polling';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { MessageSquare } from 'lucide-react';
@@ -46,8 +47,8 @@ export function Feed() {
         {/* Message Composer */}
         <MessageComposer />
 
-        {/* Message Feed */}
-        <MessageFeed limit={50} />
+        {/* Message Feed — polls every 30 s for new messages */}
+        <MessageFeed limit={50} pollInterval={POLLING.feedInterval} />
       </div>
     </div>
   );
