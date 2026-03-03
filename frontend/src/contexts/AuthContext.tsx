@@ -56,13 +56,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (userSession.isSignInPending()) {
-      userSession.handlePendingSignIn().then(() => {
-        checkAuth();
-      });
+      userSession.handlePendingSignIn()
+        .then(() => {
+          checkAuth();
+        })
+        .catch((err) => {
+          console.error('Failed to complete pending sign-in:', err);
+          setConnectionError('Failed to complete wallet connection. Please try again.');
+        });
     } else {
       checkAuth();
     }
-  }, []);
+  }, [checkAuth]);
 
   return (
     <AuthContext.Provider value={{ 
