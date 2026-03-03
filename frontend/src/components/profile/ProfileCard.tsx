@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { standardPrincipalCV, PostConditionMode } from '@stacks/transactions';
 import { useAuth } from '@/contexts/AuthContext';
+import { useOptimistic } from '@/contexts/OptimisticContext';
 import { useTrackedContractCall } from '@/hooks/useTrackedContractCall';
 import { CONTRACTS, APP_DETAILS } from '@/config/contracts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Profile, UserStats, FollowInfo } from '@/types';
 import { Timestamp } from '@/components/ui/timestamp';
+import { PendingBadge } from '@/components/ui/pending-badge';
 import { Calendar, User } from 'lucide-react';
 
 interface ProfileCardProps {
@@ -30,9 +32,16 @@ export function ProfileCard({
   onEdit,
 }: ProfileCardProps) {
   const { isAuthenticated, userAddress } = useAuth();
+  const { addFollow, getOptimisticFollow } = useOptimistic();
   const trackedCall = useTrackedContractCall();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Check if there is an in-flight optimistic follow/unfollow for this profile.
+  const optimistic = getOptimisticFollow(profileAddress);
+  const effectiveIsFollowing = optimistic
+    ? optimistic.isFollow
+    : followInfo?.isFollowing ?? false;
 
   const handleFollowToggle = async () => {
     if (!isAuthenticated || !userAddress) {
@@ -62,6 +71,11 @@ export function ProfileCard({
       });
 
       if (txId) {
+        addFollow({
+          txId,
+          targetAddress: profileAddress,
+          isFollow: !isUnfollow,
+        });
         onFollowChange?.();
       }
     } catch (err) {
@@ -110,14 +124,17 @@ export function ProfileCard({
             userAddress !== profileAddress && (
               <Button
                 onClick={handleFollowToggle}
-                disabled={loading}
-                variant={followInfo?.isFollowing ? 'outline' : 'default'}
+                disabled={loading || !!optimistic}
+                variant={effectiveIsFollowing ? 'outline' : 'default'}
                 size="sm"
-                aria-label={followInfo?.isFollowing ? `Unfollow ${displayName}` : `Follow ${displayName}`}
+                aria-label={effectiveIsFollowing ? `Unfollow ${displayName}` : `Follow ${displayName}`}
               >
-                {loading ? 'Loading...' : followInfo?.isFollowing ? 'Unfollow' : 'Follow'}
+                {loading ? 'Loading...' : effectiveIsFollowing ? 'Unfollow' : 'Follow'}
               </Button>
             )
+          )}
+          {optimistic && (
+            <PendingBadge status={optimistic.status} className="ml-2" />
           )}
         </div>
       </CardHeader>
