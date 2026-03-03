@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useCallback, useRef, useState } from 'react';
 import { useMessages } from '@/hooks/useMessages';
 import { usePullToRefresh } from '@/hooks/usePullToRefresh';
 import { MessageCard } from './MessageCard';
@@ -27,6 +27,12 @@ export function MessageFeed({ limit = 20, authorAddress, pollInterval }: Message
     onRefresh: refetch,
     threshold: POLLING.pullToRefreshThreshold,
   });
+
+  /** Fetch new messages and scroll back to the top of the feed. */
+  const loadNewMessages = useCallback(() => {
+    refetch();
+    feedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [refetch]);
 
   useEffect(() => {
     refetch();
@@ -100,7 +106,7 @@ export function MessageFeed({ limit = 20, authorAddress, pollInterval }: Message
       {/* New messages banner */}
       <NewMessagesBanner
         count={newMessageCount}
-        onLoad={refetch}
+        onLoad={loadNewMessages}
         onDismiss={dismissNewMessages}
       />
 
