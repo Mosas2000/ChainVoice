@@ -5,6 +5,21 @@ import { useDocumentVisibility } from './useDocumentVisibility';
 import { POLLING } from '@/config/polling';
 import type { Message } from '../types';
 
+/**
+ * Fetch and poll for on-chain messages.
+ *
+ * Performs an initial full fetch on mount and then polls for new
+ * messages at the configured interval.  Polling only checks the
+ * total message count (cheap) and surfaces a `newMessageCount`
+ * value the UI can use to show a "new messages" banner.
+ *
+ * Polling pauses automatically when the browser tab is hidden and
+ * fires an immediate poll when the user returns.
+ *
+ * @param limit       - Maximum number of messages to fetch per page.
+ * @param authorAddress - Optional filter to scope messages to a single author.
+ * @param pollInterval  - Interval in milliseconds, or `null` to disable.
+ */
 export const useMessages = (
   limit: number = 20,
   authorAddress?: string,
