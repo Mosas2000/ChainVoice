@@ -5,13 +5,23 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { RefreshCw } from 'lucide-react';
 
+function formatUpdatedAgo(ts: number | null): string | null {
+  if (!ts) return null;
+  const seconds = Math.floor((Date.now() - ts) / 1000);
+  if (seconds < 10) return 'just now';
+  if (seconds < 60) return `${seconds}s ago`;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  return null;
+}
+
 interface MessageFeedProps {
   limit?: number;
   authorAddress?: string;
 }
 
 export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
-  const { messages, loading, refreshing, error, refetch } = useMessages(limit, authorAddress);
+  const { messages, loading, refreshing, error, lastFetchedAt, refetch } = useMessages(limit, authorAddress);
 
   if (loading && messages.length === 0) {
     return <MessageFeedSkeleton />;
@@ -54,9 +64,16 @@ export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">
-          {authorAddress ? 'Messages' : 'Recent Messages'}
-        </h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-lg font-semibold">
+            {authorAddress ? 'Messages' : 'Recent Messages'}
+          </h2>
+          {lastFetchedAt && (
+            <span className="text-xs text-muted-foreground">
+              · Updated {formatUpdatedAgo(lastFetchedAt) || 'recently'}
+            </span>
+          )}
+        </div>
         <Button onClick={refetch} variant="ghost" size="sm" disabled={loading || refreshing} aria-label="Refresh messages">
           <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
         </Button>
