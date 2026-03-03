@@ -4,6 +4,7 @@ import { userSession, isAuthenticated, getUserAddress, connectWallet, disconnect
 interface AuthContextType {
   isAuthenticated: boolean;
   userAddress: string | null;
+  connecting: boolean;
   checkAuth: () => void;
   connectWallet: () => Promise<void>;
   disconnectWallet: () => void;
@@ -14,6 +15,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [authenticated, setAuthenticated] = useState(false);
   const [userAddress, setUserAddress] = useState<string | null>(null);
+  const [connecting, setConnecting] = useState(false);
 
   const checkAuth = () => {
     const auth = isAuthenticated();
@@ -26,11 +28,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const handleConnectWallet = async () => {
+    setConnecting(true);
     try {
       await connectWallet();
       checkAuth();
     } catch (error) {
       console.error('Failed to connect wallet:', error);
+    } finally {
+      setConnecting(false);
     }
   };
 
@@ -53,6 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     <AuthContext.Provider value={{ 
       isAuthenticated: authenticated, 
       userAddress, 
+      connecting,
       checkAuth,
       connectWallet: handleConnectWallet,
       disconnectWallet: handleDisconnectWallet
