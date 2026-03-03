@@ -1,0 +1,23 @@
+{
+  "name": "ChainVoice",
+  "short_name": "ChainVoice",
+  "description": "Decentralized social platform built on Stacks, secured by Bitcoin",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#6D28D9",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "maskable"
+    }
+  ]
+}
