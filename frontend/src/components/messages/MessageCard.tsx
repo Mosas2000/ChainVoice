@@ -9,6 +9,7 @@ import { Timestamp } from '@/components/ui/timestamp';
 import type { Message } from '@/types';
 import { Heart, MessageCircle, User, Lock, Globe } from 'lucide-react';
 import { getContractErrorMessage } from '@/lib/contractErrors';
+import { ErrorAlert } from '@/components/ui/error-alert';
 
 interface MessageCardProps {
   message: Message;
@@ -136,9 +137,7 @@ export function MessageCard({
           </div>
 
           {error && (
-            <div role="alert" className="bg-destructive/15 text-destructive text-xs p-2 rounded-md">
-              {error}
-            </div>
+            <ErrorAlert message={error} onDismiss={() => setError(null)} />
           )}
         </div>
       </CardContent>
