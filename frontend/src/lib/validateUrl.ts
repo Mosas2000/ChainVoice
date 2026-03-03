@@ -1,3 +1,24 @@
+/**
+ * @module validateUrl
+ *
+ * URL validation for avatar URL inputs and any future URL fields.
+ *
+ * The contract stores avatar URLs as `string-ascii 200`, so we enforce
+ * printable ASCII only, a 200-char limit, and restrict the protocol to
+ * http/https to block `javascript:` and `data:` URI injection.
+ *
+ * @example
+ * ```ts
+ * import { validateAvatarUrl } from '@/lib/validateUrl';
+ *
+ * validateAvatarUrl('https://example.com/avatar.png');
+ * // { valid: true, error: null }
+ *
+ * validateAvatarUrl('javascript:alert(1)');
+ * // { valid: false, error: 'Only https:// and http:// URLs are allowed' }
+ * ```
+ */
+
 import { LIMITS } from '@/config/limits';
 
 /** Protocols that are safe for image and link `src` attributes. */

@@ -1,10 +1,23 @@
 /**
+ * @module sanitizeUrl
+ *
  * Sanitise a URL string before it is used in DOM attributes such as
  * `<img src>`.  This provides a defence-in-depth layer on top of the
  * input validation in `validateUrl.ts`.  Even if a dangerous URL
  * slipped past form validation (e.g. it was stored on-chain before
  * the validation existed), this function ensures it can never reach
  * the DOM as a javascript: or data: URI.
+ *
+ * @example
+ * ```ts
+ * import { sanitizeImageUrl } from '@/lib/sanitizeUrl';
+ *
+ * sanitizeImageUrl('https://example.com/pic.png');
+ * // 'https://example.com/pic.png'
+ *
+ * sanitizeImageUrl('javascript:alert(1)');
+ * // ''
+ * ```
  */
 
 const SAFE_PROTOCOL_RE = /^https?:\/\//i;

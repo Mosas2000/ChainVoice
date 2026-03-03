@@ -1,10 +1,23 @@
 /**
+ * @module validateAddress
+ *
  * A lightweight Stacks principal address validator.
  *
  * Standard Stacks addresses start with SP (mainnet) or ST (testnet)
  * followed by a base-58 encoded body.  Contract principals append a
  * dot and the contract name.  This utility validates the format
  * without importing the full @stacks/transactions library.
+ *
+ * @example
+ * ```ts
+ * import { validateStxAddress } from '@/lib/validateAddress';
+ *
+ * const result = validateStxAddress('SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7');
+ * // { valid: true, error: null }
+ *
+ * const bad = validateStxAddress('0x1234');
+ * // { valid: false, error: 'Address must start with SP ...' }
+ * ```
  */
 
 /**

@@ -1,10 +1,23 @@
 /**
+ * @module sanitizeContent
+ *
  * Content sanitisation helpers.
  *
  * User-generated text displayed in the feed can contain invisible
  * Unicode characters that disrupt layout or trick users (e.g. RTL
  * override, zero-width joiners used for homograph attacks).  These
  * helpers strip or replace such characters before rendering.
+ *
+ * @example
+ * ```ts
+ * import { sanitizeContent } from '@/lib/sanitizeContent';
+ *
+ * sanitizeContent('hello\u200Bworld');
+ * // 'helloworld'
+ *
+ * sanitizeContent('line1\n\n\n\n\nline2');
+ * // 'line1\n\nline2'
+ * ```
  */
 
 /**
