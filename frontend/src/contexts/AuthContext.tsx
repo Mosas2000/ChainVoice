@@ -6,6 +6,7 @@ interface AuthContextType {
   userAddress: string | null;
   connecting: boolean;
   connectionError: string | null;
+  initializing: boolean;
   checkAuth: () => void;
   connectWallet: () => Promise<void>;
   disconnectWallet: () => void;
@@ -19,6 +20,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userAddress, setUserAddress] = useState<string | null>(null);
   const [connecting, setConnecting] = useState(false);
   const [connectionError, setConnectionError] = useState<string | null>(null);
+  const [initializing, setInitializing] = useState(true);
 
   const checkAuth = () => {
     const auth = isAuthenticated();
@@ -61,9 +63,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (userSession.isSignInPending()) {
       userSession.handlePendingSignIn().then(() => {
         checkAuth();
+      }).finally(() => {
+        setInitializing(false);
       });
     } else {
       checkAuth();
+      setInitializing(false);
     }
   }, []);
 
@@ -73,6 +78,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       userAddress, 
       connecting,
       connectionError,
+      initializing,
       checkAuth,
       connectWallet: handleConnectWallet,
       disconnectWallet: handleDisconnectWallet,
