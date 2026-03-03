@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useLockBodyScroll } from '@/hooks/useLockBodyScroll';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
-import { MessageSquare, Home, Rss, User, LogOut, Wallet } from 'lucide-react';
+import { Home, Rss, User, LogOut, Wallet } from 'lucide-react';
 
 interface MobileNavProps {
   open: boolean;
@@ -71,7 +71,7 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
           {/* Drawer header */}
           <div className="flex items-center justify-between px-4 h-16 border-b">
             <div className="flex items-center gap-2">
-              <MessageSquare className="h-5 w-5 text-primary" />
+              <img src="/favicon.svg" alt="" className="h-5 w-5" aria-hidden="true" />
               <span className="font-semibold">ChainVoice</span>
             </div>
             <ThemeToggle />
