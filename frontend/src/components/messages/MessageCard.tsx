@@ -9,6 +9,7 @@ import { Timestamp } from '@/components/ui/timestamp';
 import type { Message } from '@/types';
 import { Heart, MessageCircle, User, Lock, Globe } from 'lucide-react';
 import { sanitizeImageUrl } from '@/lib/sanitizeUrl';
+import { sanitizeContent } from '@/lib/sanitizeContent';
 
 interface MessageCardProps {
   message: Message;
@@ -112,7 +113,7 @@ export function MessageCard({
 
           {/* Content */}
           <div className="text-sm whitespace-pre-wrap break-words">
-            {message.content}
+            {sanitizeContent(message.content)}
           </div>
 
           {/* Actions */}
