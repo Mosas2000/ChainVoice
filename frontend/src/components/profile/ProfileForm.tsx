@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
+import { stringAsciiCV, PostConditionMode } from '@stacks/transactions';
 import { useAuth } from '@/contexts/AuthContext';
-import { createProfile, updateProfile } from '@/services/profiles';
+import { useTrackedContractCall } from '@/hooks/useTrackedContractCall';
+import { CONTRACTS, APP_DETAILS } from '@/config/contracts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -18,6 +20,7 @@ interface ProfileFormProps {
 
 export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
   const { isAuthenticated } = useAuth();
+  const trackedCall = useTrackedContractCall();
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
@@ -70,12 +73,30 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
     setError(null);
 
     try {
-      if (existingProfile) {
-        await updateProfile(username, bio, avatarUrl);
-      } else {
-        await createProfile(username, bio, avatarUrl);
+      const isUpdate = !!existingProfile;
+      const functionName = isUpdate ? 'update-profile' : 'create-profile';
+
+      const txId = await trackedCall({
+        contractCallOptions: {
+          contractAddress: CONTRACTS.profiles.address,
+          contractName: CONTRACTS.profiles.name,
+          functionName,
+          functionArgs: [
+            stringAsciiCV(username),
+            stringAsciiCV(bio),
+            stringAsciiCV(avatarUrl),
+          ],
+          network: CONTRACTS.network,
+          postConditionMode: PostConditionMode.Deny,
+          appDetails: APP_DETAILS,
+        },
+        action: isUpdate ? 'update-profile' : 'create-profile',
+        description: 'Username: ' + username,
+      });
+
+      if (txId) {
+        onSuccess?.();
       }
-      onSuccess?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save profile');
     } finally {
