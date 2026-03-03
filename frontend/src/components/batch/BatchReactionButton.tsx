@@ -3,6 +3,7 @@ import { useReactToMultiple } from '@/hooks/useBatchContract';
 import { Button } from '@/components/ui/button';
 import { Heart, ThumbsUp, Smile, Star } from 'lucide-react';
 import { useToast } from '@/components/ui/toast';
+import { getContractErrorMessage } from '@/lib/contractErrors';
 
 interface BatchReactionButtonProps {
     messageIds: number[];
@@ -29,7 +30,7 @@ export function BatchReactionButton({
             await reactToMultiple.mutateAsync({ messageIds, reactionType });
             showToast(`Reacted to ${messageIds.length} messages!`, 'success');
         } catch (error) {
-            showToast('Failed to react', 'error');
+            showToast(getContractErrorMessage(error), 'error');
             console.error(error);
         }
     };

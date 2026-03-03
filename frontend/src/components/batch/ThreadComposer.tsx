@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus, Send, X } from 'lucide-react';
 import { useToast } from '@/components/ui/toast';
+import { getContractErrorMessage } from '@/lib/contractErrors';
 
 export function ThreadComposer() {
     const [posts, setPosts] = useState(['']);
@@ -38,7 +39,7 @@ export function ThreadComposer() {
             showToast('Thread posted successfully!', 'success');
             setPosts(['']);
         } catch (error) {
-            showToast('Failed to post thread', 'error');
+            showToast(getContractErrorMessage(error), 'error');
             console.error(error);
         }
     };

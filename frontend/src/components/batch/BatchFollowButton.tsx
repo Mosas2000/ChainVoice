@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { UserPlus } from 'lucide-react';
 import { useToast } from '@/components/ui/toast';
+import { getContractErrorMessage } from '@/lib/contractErrors';
 
 interface BatchFollowButtonProps {
     userAddresses: string[];
@@ -20,7 +21,7 @@ export function BatchFollowButton({ userAddresses, onSuccess }: BatchFollowButto
             showToast(`Followed ${userAddresses.length} users!`, 'success');
             onSuccess?.();
         } catch (error) {
-            showToast('Failed to follow users', 'error');
+            showToast(getContractErrorMessage(error), 'error');
             console.error(error);
         }
     };
