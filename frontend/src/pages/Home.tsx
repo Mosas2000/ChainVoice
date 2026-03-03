@@ -11,8 +11,8 @@ export function Home() {
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       {/* Hero Section */}
       <div className="text-center space-y-6 py-8 md:py-12">
-        <div className="flex items-center justify-center gap-2 mb-4">
-          <MessageSquare className="h-8 w-8 md:h-12 md:w-12 text-primary" />
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <img src="/logo.svg" alt="" className="h-10 w-10 md:h-14 md:w-14" aria-hidden="true" />
           <h1 className="text-3xl md:text-5xl font-bold">ChainVoice</h1>
         </div>
         <p className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto">
