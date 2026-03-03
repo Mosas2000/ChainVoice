@@ -6,6 +6,7 @@ import { NewMessagesBanner } from './NewMessagesBanner';
 import { PullToRefreshIndicator } from './PullToRefreshIndicator';
 import { MessageFeedSkeleton } from '@/components/skeletons';
 import { formatRelativeTime } from '@/lib/formatRelativeTime';
+import { POLLING } from '@/config/polling';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { RefreshCw } from 'lucide-react';
@@ -24,6 +25,7 @@ export function MessageFeed({ limit = 20, authorAddress, pollInterval }: Message
   const feedRef = useRef<HTMLDivElement>(null);
   const { pullDistance, refreshing } = usePullToRefresh(feedRef, {
     onRefresh: refetch,
+    threshold: POLLING.pullToRefreshThreshold,
   });
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export function MessageFeed({ limit = 20, authorAddress, pollInterval }: Message
   const [relativeLabel, setRelativeLabel] = useState(() => formatRelativeTime(lastRefreshedAt));
   useEffect(() => {
     setRelativeLabel(formatRelativeTime(lastRefreshedAt));
-    const id = setInterval(() => setRelativeLabel(formatRelativeTime(lastRefreshedAt)), 15_000);
+    const id = setInterval(() => setRelativeLabel(formatRelativeTime(lastRefreshedAt)), POLLING.relativeTimeTick);
     return () => clearInterval(id);
   }, [lastRefreshedAt]);
 

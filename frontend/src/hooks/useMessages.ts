@@ -2,15 +2,13 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { getMessage, getMessageCount, getMessagesPage, getLatestMessagesInfo } from '../services/messages';
 import { usePolling } from './usePolling';
 import { useDocumentVisibility } from './useDocumentVisibility';
+import { POLLING } from '@/config/polling';
 import type { Message } from '../types';
-
-/** Default polling interval in milliseconds (30 seconds). */
-const DEFAULT_POLL_INTERVAL = 30_000;
 
 export const useMessages = (
   limit: number = 20,
   authorAddress?: string,
-  pollInterval: number | null = DEFAULT_POLL_INTERVAL,
+  pollInterval: number | null = POLLING.feedInterval,
 ) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
