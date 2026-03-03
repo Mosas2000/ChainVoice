@@ -5,6 +5,7 @@ import type { Message } from '../types';
 export const useMessages = (limit: number = 20, authorAddress?: string) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(0);
@@ -20,11 +21,15 @@ export const useMessages = (limit: number = 20, authorAddress?: string) => {
   const fetchMessages = useCallback(async () => {
     const id = ++fetchIdRef.current;
     const { limit: _limit } = paramsRef.current;
-    setLoading(true);
+    const isRefresh = messages.length > 0;
+    if (isRefresh) {
+      setRefreshing(true);
+    } else {
+      setLoading(true);
+    }
     setError(null);
     try {
       const count = await getMessageCount();
-      // If a newer fetch was launched while we were waiting, bail out.
       if (id !== fetchIdRef.current) return;
 
       setTotalCount(count);
@@ -41,6 +46,7 @@ export const useMessages = (limit: number = 20, authorAddress?: string) => {
     } finally {
       if (id === fetchIdRef.current) {
         setLoading(false);
+        setRefreshing(false);
       }
     }
   }, []);
@@ -75,6 +81,7 @@ export const useMessages = (limit: number = 20, authorAddress?: string) => {
   return {
     messages,
     loading,
+    refreshing,
     error,
     totalCount,
     page,
