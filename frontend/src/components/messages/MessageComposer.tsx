@@ -5,6 +5,7 @@ import {
   PostConditionMode,
 } from '@stacks/transactions';
 import { useAuth } from '@/contexts/AuthContext';
+import { useOptimistic } from '@/contexts/OptimisticContext';
 import { useTrackedContractCall } from '@/hooks/useTrackedContractCall';
 import { CONTRACTS, APP_DETAILS } from '@/config/contracts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,7 +23,8 @@ interface MessageComposerProps {
 }
 
 export function MessageComposer({ onSuccess, recipientAddress, recipientName }: MessageComposerProps) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, userAddress } = useAuth();
+  const { addMessage } = useOptimistic();
   const trackedCall = useTrackedContractCall();
   const [content, setContent] = useState('');
   const [recipient, setRecipient] = useState(recipientAddress || '');
@@ -75,6 +77,12 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
           description: preview,
         });
         if (txId) {
+          addMessage({
+            txId,
+            content,
+            author: userAddress ?? '',
+            isPublic: true,
+          });
           setContent('');
           onSuccess?.();
         }
@@ -93,6 +101,13 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
           description: preview,
         });
         if (txId) {
+          addMessage({
+            txId,
+            content,
+            author: userAddress ?? '',
+            isPublic: false,
+            recipient,
+          });
           setContent('');
           setRecipient('');
           onSuccess?.();
