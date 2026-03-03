@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Timestamp } from '@/components/ui/timestamp';
 import type { Message } from '@/types';
 import { Heart, MessageCircle, User, Lock, Globe } from 'lucide-react';
+import { getContractErrorMessage } from '@/lib/contractErrors';
 
 interface MessageCardProps {
   message: Message;
@@ -49,7 +50,7 @@ export function MessageCard({
       }
       onReactionChange?.();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update reaction');
+      setError(getContractErrorMessage(err));
     } finally {
       setLoading(false);
     }
