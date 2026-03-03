@@ -63,4 +63,18 @@
   .animate-pulse {
     animation: none;
   }
+  /* Collapse drawer slide and backdrop fade to an instant swap */
+  [role="dialog"],
+  [aria-hidden="true"] {
+    transition-duration: 0ms !important;
+  }
+}
+
+/* Mobile-specific touch targets — ensure tap areas are at least 44px
+   per WCAG 2.5.5 Target Size guidelines on small viewports. */
+@media (max-width: 767px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }

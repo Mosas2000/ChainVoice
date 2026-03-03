@@ -8,10 +8,10 @@ export function Footer() {
 
   return (
     <footer className="border-t bg-background" role="contentinfo" aria-label="Site footer">
-      <div className="container py-8">
-        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
+      <div className="container py-6 md:py-8">
+        <div className="grid gap-6 grid-cols-2 md:grid-cols-4 md:gap-8">
           {/* Brand */}
-          <div className="space-y-3">
+          <div className="space-y-3 col-span-2 md:col-span-1">
             <div className="flex items-center gap-2">
               <MessageSquare className="h-5 w-5 text-primary" />
               <span className="font-semibold">ChainVoice</span>
@@ -76,7 +76,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 border-t pt-6 text-center text-sm text-muted-foreground">
+        <div className="mt-6 md:mt-8 border-t pt-4 md:pt-6 text-center text-xs md:text-sm text-muted-foreground">
           <p>&copy; {currentYear} ChainVoice. Built on Stacks &bull; Secured by Bitcoin.</p>
         </div>
       </div>

@@ -102,8 +102,8 @@ export function Profile() {
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Create Your Profile</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-2xl md:text-3xl font-bold mb-1 md:mb-2">Create Your Profile</h1>
+            <p className="text-sm md:text-base text-muted-foreground">
               Set up your ChainVoice profile to start sharing your voice
             </p>
           </div>
@@ -118,8 +118,8 @@ export function Profile() {
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Edit Profile</h1>
-            <p className="text-muted-foreground">Update your profile information</p>
+            <h1 className="text-2xl md:text-3xl font-bold mb-1 md:mb-2">Edit Profile</h1>
+            <p className="text-sm md:text-base text-muted-foreground">Update your profile information</p>
           </div>
           <ProfileForm existingProfile={profile} onSuccess={handleProfileUpdate} />
           <Button onClick={() => setIsEditing(false)} variant="outline" className="w-full">
@@ -134,8 +134,8 @@ export function Profile() {
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Your Profile</h1>
-          <p className="text-muted-foreground">Manage your profile and view your messages</p>
+          <h1 className="text-2xl md:text-3xl font-bold mb-1 md:mb-2">Your Profile</h1>
+          <p className="text-sm md:text-base text-muted-foreground">Manage your profile and view your messages</p>
         </div>
 
         <ProfileCard
