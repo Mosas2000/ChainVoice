@@ -24,8 +24,12 @@ export const connectWallet = (): Promise<void> => {
   });
 };
 
-export const disconnectWallet = () => {
-  userSession.signUserOut();
+export const disconnectWallet = (): void => {
+  try {
+    userSession.signUserOut();
+  } catch {
+    // signUserOut may throw if the session is already cleared; ignore.
+  }
   window.location.href = '/';
 };
 
