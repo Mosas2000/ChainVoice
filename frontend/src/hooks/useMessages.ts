@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { getMessage, getMessageCount, getMessagesPage, getLatestMessagesInfo } from '../services/messages';
 import type { Message } from '../types';
 
@@ -10,25 +10,28 @@ export const useMessages = (limit: number = 20, authorAddress?: string) => {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(false);
 
+  // Keep the latest values in a ref so the callback identity stays stable.
+  const paramsRef = useRef({ limit, authorAddress, page });
+  paramsRef.current = { limit, authorAddress, page };
+
   const fetchMessages = useCallback(async () => {
+    const { limit: _limit } = paramsRef.current;
     setLoading(true);
     setError(null);
     try {
       const count = await getMessageCount();
       setTotalCount(count);
 
-      // Use pagination info to determine what to fetch
-      const pageInfo = await getLatestMessagesInfo(limit);
+      const pageInfo = await getLatestMessagesInfo(_limit);
       setHasMore(pageInfo.hasMore);
 
-      // For now, return empty array since we don't have real data yet
       setMessages([]);
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  }, [limit, authorAddress, page]);
+  }, []);
 
   const nextPage = useCallback(() => {
     if (hasMore) {
