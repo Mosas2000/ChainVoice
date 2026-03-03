@@ -20,6 +20,10 @@ export const CONTRACTS = {
   network,
 };
 
+/**
+ * Details shown in the Stacks wallet popup when the user connects
+ * or signs a transaction.  The icon must be a fully-qualified URL.
+ */
 export const APP_DETAILS = {
   name: 'ChainVoice',
   icon: window.location.origin + '/logo.svg',
