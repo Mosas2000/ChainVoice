@@ -34,9 +34,10 @@ export const useMessages = (limit: number = 20, authorAddress?: string) => {
 
       setHasMore(pageInfo.hasMore);
       setMessages([]);
-    } catch (err: any) {
+    } catch (err: unknown) {
       if (id !== fetchIdRef.current) return;
-      setError(err.message);
+      const message = err instanceof Error ? err.message : 'Failed to load messages';
+      setError(message);
     } finally {
       if (id === fetchIdRef.current) {
         setLoading(false);
