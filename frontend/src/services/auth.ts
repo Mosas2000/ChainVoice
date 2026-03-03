@@ -1,5 +1,5 @@
 import { AppConfig, UserSession, showConnect } from '@stacks/connect';
-import { APP_DETAILS } from '../config/contracts';
+import { APP_DETAILS, NETWORK } from '../config/contracts';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig });
@@ -36,7 +36,12 @@ export const disconnectWallet = (): void => {
 export const getUserAddress = (): string | null => {
   if (userSession.isUserSignedIn()) {
     const userData = userSession.loadUserData();
-    return userData.profile.stxAddress.testnet || userData.profile.stxAddress.mainnet;
+    const stxAddress = userData.profile.stxAddress;
+    // Return the address that matches the configured network so contract
+    // calls go to the right chain.
+    return NETWORK === 'mainnet'
+      ? stxAddress.mainnet
+      : stxAddress.testnet || stxAddress.mainnet;
   }
   return null;
 };
