@@ -27,6 +27,7 @@ export function Footer() {
             <nav aria-label="Footer navigation" className="flex flex-col gap-2 text-sm text-muted-foreground">
               <Link to="/" className="hover:text-foreground transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">Home</Link>
               <Link to="/feed" className="hover:text-foreground transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">Feed</Link>
+              <Link to="/discover" className="hover:text-foreground transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">Discover</Link>
               <Link to="/profile" className="hover:text-foreground transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">Profile</Link>
             </nav>
           </div>

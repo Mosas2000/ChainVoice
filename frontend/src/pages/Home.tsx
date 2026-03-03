@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { ExternalLink } from '@/components/ui/external-link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MessageSquare, Shield, Wallet, Zap, Github } from 'lucide-react';
+import { MessageSquare, Shield, Wallet, Zap, Github, Search } from 'lucide-react';
 import { EXTERNAL_LINKS } from '@/config/links';
 
 export function Home() {
@@ -25,10 +25,16 @@ export function Home() {
               Get Started
             </Button>
           </Link>
-          <ExternalLink href={EXTERNAL_LINKS.github} label="ChainVoice on GitHub" className="w-full sm:w-auto">
+          <Link to="/discover" className="w-full sm:w-auto">
             <Button size="lg" variant="outline" className="w-full sm:w-auto">
+              <Search className="h-4 w-4 mr-2" />
+              Discover Users
+            </Button>
+          </Link>
+          <ExternalLink href={EXTERNAL_LINKS.github} label="ChainVoice on GitHub" className="w-full sm:w-auto">
+            <Button size="lg" variant="ghost" className="w-full sm:w-auto">
               <Github className="h-4 w-4 mr-2" />
-              View on GitHub
+              GitHub
             </Button>
           </ExternalLink>
         </div>

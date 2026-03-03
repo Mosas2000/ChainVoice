@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useRouteChange } from '@/hooks/useRouteChange';
+import { useSearchShortcut } from '@/hooks/useSearchShortcut';
 import { BREAKPOINTS } from '@/config/breakpoints';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { MobileNav } from '@/components/layout/MobileNav';
@@ -33,6 +34,9 @@ export function Header() {
     }
   }, [isDesktop]);
 
+  // Cmd+K / Ctrl+K navigates to the Discover page from anywhere
+  useSearchShortcut();
+
   const formatAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
@@ -61,6 +65,12 @@ export function Header() {
                   className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
                   Feed
+                </Link>
+                <Link
+                  to="/discover"
+                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  Discover
                 </Link>
                 <Link
                   to="/profile"
