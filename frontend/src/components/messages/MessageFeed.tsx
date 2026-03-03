@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMessages } from '@/hooks/useMessages';
+import { usePullToRefresh } from '@/hooks/usePullToRefresh';
 import { MessageCard } from './MessageCard';
 import { NewMessagesBanner } from './NewMessagesBanner';
+import { PullToRefreshIndicator } from './PullToRefreshIndicator';
 import { MessageFeedSkeleton } from '@/components/skeletons';
 import { formatRelativeTime } from '@/lib/formatRelativeTime';
 import { Button } from '@/components/ui/button';
@@ -17,6 +19,12 @@ interface MessageFeedProps {
 
 export function MessageFeed({ limit = 20, authorAddress, pollInterval }: MessageFeedProps) {
   const { messages, loading, error, newMessageCount, lastRefreshedAt, refetch, dismissNewMessages } = useMessages(limit, authorAddress, pollInterval);
+
+  // Pull-to-refresh on touch devices
+  const feedRef = useRef<HTMLDivElement>(null);
+  const { pullDistance, refreshing } = usePullToRefresh(feedRef, {
+    onRefresh: refetch,
+  });
 
   useEffect(() => {
     refetch();
@@ -69,7 +77,10 @@ export function MessageFeed({ limit = 20, authorAddress, pollInterval }: Message
   }
 
   return (
-    <div className="space-y-4">
+    <div ref={feedRef} className="space-y-4">
+      {/* Pull-to-refresh visual indicator (touch devices) */}
+      <PullToRefreshIndicator pullDistance={pullDistance} refreshing={refreshing} />
+
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">
           {authorAddress ? 'Messages' : 'Recent Messages'}
