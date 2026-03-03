@@ -66,6 +66,12 @@ export const useMessages = (limit: number = 20, authorAddress?: string) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [limit, authorAddress, page]);
 
+  // When the author filter changes, reset back to the first page so
+  // we don't end up on an invalid page for the new data set.
+  useEffect(() => {
+    setPage(0);
+  }, [authorAddress]);
+
   return {
     messages,
     loading,
