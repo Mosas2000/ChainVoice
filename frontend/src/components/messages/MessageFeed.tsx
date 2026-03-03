@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useMessages } from '@/hooks/useMessages';
 import { MessageCard } from './MessageCard';
 import { NewMessagesBanner } from './NewMessagesBanner';
 import { MessageFeedSkeleton } from '@/components/skeletons';
+import { formatRelativeTime } from '@/lib/formatRelativeTime';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { RefreshCw } from 'lucide-react';
@@ -15,11 +16,19 @@ interface MessageFeedProps {
 }
 
 export function MessageFeed({ limit = 20, authorAddress, pollInterval }: MessageFeedProps) {
-  const { messages, loading, error, newMessageCount, refetch, dismissNewMessages } = useMessages(limit, authorAddress, pollInterval);
+  const { messages, loading, error, newMessageCount, lastRefreshedAt, refetch, dismissNewMessages } = useMessages(limit, authorAddress, pollInterval);
 
   useEffect(() => {
     refetch();
   }, [authorAddress, limit, refetch]);
+
+  // Ticking relative time label (e.g. "2 m ago")
+  const [relativeLabel, setRelativeLabel] = useState(() => formatRelativeTime(lastRefreshedAt));
+  useEffect(() => {
+    setRelativeLabel(formatRelativeTime(lastRefreshedAt));
+    const id = setInterval(() => setRelativeLabel(formatRelativeTime(lastRefreshedAt)), 15_000);
+    return () => clearInterval(id);
+  }, [lastRefreshedAt]);
 
   if (loading && messages.length === 0) {
     return <MessageFeedSkeleton />;
@@ -65,9 +74,14 @@ export function MessageFeed({ limit = 20, authorAddress, pollInterval }: Message
         <h2 className="text-lg font-semibold">
           {authorAddress ? 'Messages' : 'Recent Messages'}
         </h2>
-        <Button onClick={refetch} variant="ghost" size="sm" disabled={loading} aria-label="Refresh messages">
-          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-        </Button>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground" aria-label="Last refreshed">
+            {relativeLabel}
+          </span>
+          <Button onClick={refetch} variant="ghost" size="sm" disabled={loading} aria-label="Refresh messages">
+            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+          </Button>
+        </div>
       </div>
 
       {/* New messages banner */}
