@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Profile, UserStats, FollowInfo } from '@/types';
 import { Timestamp } from '@/components/ui/timestamp';
 import { Calendar, User } from 'lucide-react';
+import { sanitizeImageUrl } from '@/lib/sanitizeUrl';
 
 interface ProfileCardProps {
   profile: Profile;
@@ -90,7 +91,7 @@ export function ProfileCard({
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-4">
             <Avatar className="h-16 w-16">
-              <AvatarImage src={profile.avatarUrl || undefined} alt={displayName} />
+              <AvatarImage src={sanitizeImageUrl(profile.avatarUrl) || undefined} alt={displayName} />
               <AvatarFallback>
                 {profile.avatarUrl ? <User className="h-8 w-8" /> : getInitials(displayName)}
               </AvatarFallback>
