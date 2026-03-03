@@ -21,7 +21,7 @@ interface MessageFeedProps {
 }
 
 export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
-  const { messages, loading, refreshing, error, lastFetchedAt, refetch } = useMessages(limit, authorAddress);
+  const { messages, loading, refreshing, error, lastFetchedAt, totalCount, refetch } = useMessages(limit, authorAddress);
 
   if (loading && messages.length === 0) {
     return <MessageFeedSkeleton />;
@@ -63,7 +63,7 @@ export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <section className="space-y-4" aria-label={authorAddress ? 'User messages' : 'Message feed'}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h2 className="text-lg font-semibold">
@@ -93,10 +93,10 @@ export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
       {messages.length >= limit && (
         <div className="text-center py-4">
           <p className="text-sm text-muted-foreground">
-            Showing {messages.length} most recent messages
+            Showing {messages.length} of {totalCount} messages
           </p>
         </div>
       )}
-    </div>
+    </section>
   );
 }
