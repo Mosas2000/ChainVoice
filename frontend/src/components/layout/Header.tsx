@@ -8,12 +8,13 @@ import { useSearchShortcut } from '@/hooks/useSearchShortcut';
 import { BREAKPOINTS } from '@/config/breakpoints';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { MobileNav } from '@/components/layout/MobileNav';
+import { WalletButtonSkeleton } from '@/components/layout/WalletButtonSkeleton';
 import { HamburgerIcon } from '@/components/layout/HamburgerIcon';
 import { Button } from '@/components/ui/button';
 import { MessageSquare, Loader2, X } from 'lucide-react';
 
 export function Header() {
-  const { isAuthenticated, userAddress, connecting, connectionError, connectWallet, disconnectWallet, clearConnectionError } = useAuth();
+  const { isAuthenticated, userAddress, connecting, connectionError, initializing, connectWallet, disconnectWallet, clearConnectionError } = useAuth();
   const { pendingCount } = useTransactions();
   const isDesktop = useMediaQuery(BREAKPOINTS.md);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -100,7 +101,9 @@ export function Header() {
             {isDesktop && (
               <>
                 <ThemeToggle />
-                {isAuthenticated && userAddress ? (
+                {initializing ? (
+                  <WalletButtonSkeleton />
+                ) : isAuthenticated && userAddress ? (
                   <div className="flex items-center gap-3">
                     <span className="text-sm text-muted-foreground">
                       {formatAddress(userAddress)}
