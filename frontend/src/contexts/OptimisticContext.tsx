@@ -1,3 +1,17 @@
+/**
+ * OptimisticContext — manages locally-cached entries for messages and
+ * follow actions whose blockchain transactions are still in flight.
+ *
+ * The store provides:
+ *  - `addMessage` / `addFollow` — inject pending entries immediately
+ *    after the wallet returns a txId.
+ *  - `confirmEntry` / `failEntry` — called by the OptimisticBridge
+ *    once the TransactionContext reports a terminal status.
+ *  - `removeEntry` — tear down an entry after its UI lifecycle is done.
+ *
+ * Entries are persisted in `sessionStorage` and automatically pruned
+ * if they are older than 30 minutes.
+ */
 import {
   createContext,
   useCallback,
