@@ -4,7 +4,7 @@ import type { Message } from '../types';
 
 export const useMessages = (limit: number = 20, authorAddress?: string) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(0);
