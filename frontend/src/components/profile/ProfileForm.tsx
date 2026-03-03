@@ -31,6 +31,13 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
   const usernameValidation = useMemo(() => validateUsername(username), [username]);
   const avatarUrlValidation = useMemo(() => validateAvatarUrl(avatarUrl), [avatarUrl]);
 
+  const bioError = useMemo(() => {
+    if (bio.length === 0) return null;
+    if (bio.length > LIMITS.bio.max) return `Bio must be ${LIMITS.bio.max} characters or fewer`;
+    if (!isAscii(bio)) return 'Bio must contain only ASCII characters (the contract uses string-ascii)';
+    return null;
+  }, [bio]);
+
   useEffect(() => {
     if (existingProfile) {
       setUsername(existingProfile.username);
@@ -51,13 +58,8 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
       return;
     }
 
-    if (bio.length > LIMITS.bio.max) {
-      setError(`Bio must be ${LIMITS.bio.max} characters or fewer`);
-      return;
-    }
-
-    if (bio.length > 0 && !isAscii(bio)) {
-      setError('Bio must contain only ASCII characters (the contract uses string-ascii)');
+    if (bioError) {
+      setError(bioError);
       return;
     }
 
@@ -184,9 +186,19 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
               placeholder="Tell us about yourself..."
               rows={4}
               maxLength={LIMITS.bio.max}
-              className={bio.length > LIMITS.bio.max ? 'border-destructive' : ''}
+              aria-invalid={!!bioError}
+              aria-describedby="bio-feedback"
+              className={bioError ? 'border-destructive' : ''}
             />
-            <div className="flex justify-end mt-1">
+            <div className="flex items-center justify-between mt-1">
+              <div id="bio-feedback">
+                {bioError ? (
+                  <p className="text-xs text-destructive flex items-center gap-1">
+                    <XCircle className="h-3 w-3" />
+                    {bioError}
+                  </p>
+                ) : null}
+              </div>
               <CharacterCounter current={bio.length} max={LIMITS.bio.max} showBar />
             </div>
           </div>
@@ -238,7 +250,7 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
             disabled={
               loading ||
               !usernameValidation.valid ||
-              bio.length > LIMITS.bio.max ||
+              !!bioError ||
               !avatarUrlValidation.valid
             }
             className="w-full"
