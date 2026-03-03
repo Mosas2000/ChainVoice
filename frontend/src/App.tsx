@@ -9,6 +9,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ToastContainer } from '@/components/ui/toast-container';
 import { TransactionToastBridge } from '@/components/transactions/TransactionToastBridge';
+import { OptimisticBridge } from '@/components/OptimisticBridge';
 import { Home } from '@/pages/Home';
 import { Feed } from '@/pages/Feed';
 import { Profile } from '@/pages/Profile';
@@ -39,6 +40,7 @@ function App() {
                 </div>
                 <ToastContainer />
                 <TransactionToastBridge />
+                <OptimisticBridge />
               </OptimisticProvider>
               </TransactionProvider>
             </AuthProvider>
