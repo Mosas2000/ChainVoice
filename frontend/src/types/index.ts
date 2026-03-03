@@ -45,3 +45,50 @@ export interface FollowInfo {
   /** Block height (on-chain) or Unix-ms timestamp (stubs) when the follow occurred. */
   followedAt?: BlockTimestamp;
 }
+
+// ── Optimistic UI ─────────────────────────────────
+
+/** Lifecycle state of an optimistic entry while the transaction is in flight. */
+export type OptimisticStatus = 'pending' | 'confirmed' | 'failed';
+
+/**
+ * A message injected into the feed immediately after submission,
+ * before the blockchain transaction has been confirmed.
+ */
+export interface OptimisticMessage {
+  /** Locally-generated id so React can key the element. */
+  localId: string;
+  /** The blockchain transaction id returned by the wallet. */
+  txId: string;
+  /** The message content the user typed. */
+  content: string;
+  /** Author's STX address. */
+  author: string;
+  /** Whether this is a public or direct message. */
+  isPublic: boolean;
+  /** Optional recipient for direct messages. */
+  recipient?: string;
+  /** Unix-ms timestamp of when the entry was created locally. */
+  createdAt: number;
+  /** Current lifecycle status. */
+  status: OptimisticStatus;
+}
+
+/**
+ * An optimistic follow or unfollow action shown immediately in the UI
+ * while the on-chain transaction confirms.
+ */
+export interface OptimisticFollow {
+  /** Locally-generated id. */
+  localId: string;
+  /** The blockchain transaction id. */
+  txId: string;
+  /** The address being followed / unfollowed. */
+  targetAddress: string;
+  /** Whether this is a follow (true) or unfollow (false) action. */
+  isFollow: boolean;
+  /** Unix-ms timestamp of when the entry was created locally. */
+  createdAt: number;
+  /** Current lifecycle status. */
+  status: OptimisticStatus;
+}
