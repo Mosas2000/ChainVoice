@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Profile, UserStats, FollowInfo } from '@/types';
 import { Timestamp } from '@/components/ui/timestamp';
 import { Calendar, User } from 'lucide-react';
+import { getContractErrorMessage } from '@/lib/contractErrors';
 
 interface ProfileCardProps {
   profile: Profile;
@@ -65,7 +66,7 @@ export function ProfileCard({
         onFollowChange?.();
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update follow status');
+      setError(getContractErrorMessage(err));
     } finally {
       setLoading(false);
     }
