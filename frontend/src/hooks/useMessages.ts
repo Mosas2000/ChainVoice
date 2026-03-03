@@ -10,6 +10,7 @@ export const useMessages = (limit: number = 20, authorAddress?: string) => {
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(false);
+  const [lastFetchedAt, setLastFetchedAt] = useState<number | null>(null);
 
   // Keep the latest values in a ref so the callback identity stays stable.
   const paramsRef = useRef({ limit, authorAddress, page });
@@ -39,6 +40,7 @@ export const useMessages = (limit: number = 20, authorAddress?: string) => {
 
       setHasMore(pageInfo.hasMore);
       setMessages([]);
+      setLastFetchedAt(Date.now());
     } catch (err: unknown) {
       if (id !== fetchIdRef.current) return;
       const message = err instanceof Error ? err.message : 'Failed to load messages';
@@ -84,6 +86,7 @@ export const useMessages = (limit: number = 20, authorAddress?: string) => {
     refreshing,
     error,
     totalCount,
+    lastFetchedAt,
     page,
     hasMore,
     nextPage,
