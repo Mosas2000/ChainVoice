@@ -1,6 +1,12 @@
 import { useState } from 'react';
+import {
+  standardPrincipalCV,
+  stringUtf8CV,
+  PostConditionMode,
+} from '@stacks/transactions';
 import { useAuth } from '@/contexts/AuthContext';
-import { postPublicMessage, sendDirectMessage } from '@/services/messages';
+import { useTrackedContractCall } from '@/hooks/useTrackedContractCall';
+import { CONTRACTS, APP_DETAILS } from '@/config/contracts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -17,6 +23,7 @@ interface MessageComposerProps {
 
 export function MessageComposer({ onSuccess, recipientAddress, recipientName }: MessageComposerProps) {
   const { isAuthenticated } = useAuth();
+  const trackedCall = useTrackedContractCall();
   const [content, setContent] = useState('');
   const [recipient, setRecipient] = useState(recipientAddress || '');
   const [isPublic, setIsPublic] = useState(!recipientAddress);
@@ -51,14 +58,46 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
     setError(null);
 
     try {
+      const preview = content.length > 60 ? content.slice(0, 57) + '...' : content;
+
       if (isPublic) {
-        await postPublicMessage(content);
+        const txId = await trackedCall({
+          contractCallOptions: {
+            contractAddress: CONTRACTS.messages.address,
+            contractName: CONTRACTS.messages.name,
+            functionName: 'post-public-message',
+            functionArgs: [stringUtf8CV(content)],
+            network: CONTRACTS.network,
+            postConditionMode: PostConditionMode.Deny,
+            appDetails: APP_DETAILS,
+          },
+          action: 'post-message',
+          description: preview,
+        });
+        if (txId) {
+          setContent('');
+          onSuccess?.();
+        }
       } else {
-        await sendDirectMessage(recipient, content);
+        const txId = await trackedCall({
+          contractCallOptions: {
+            contractAddress: CONTRACTS.messages.address,
+            contractName: CONTRACTS.messages.name,
+            functionName: 'send-direct-message',
+            functionArgs: [standardPrincipalCV(recipient), stringUtf8CV(content)],
+            network: CONTRACTS.network,
+            postConditionMode: PostConditionMode.Deny,
+            appDetails: APP_DETAILS,
+          },
+          action: 'send-dm',
+          description: preview,
+        });
+        if (txId) {
+          setContent('');
+          setRecipient('');
+          onSuccess?.();
+        }
       }
-      setContent('');
-      setRecipient('');
-      onSuccess?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to send message');
     } finally {
