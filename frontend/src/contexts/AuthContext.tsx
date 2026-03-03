@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { userSession, isAuthenticated, getUserAddress, connectWallet, disconnectWallet } from '../services/auth';
 
@@ -50,6 +50,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const clearConnectionError = useCallback(() => {
     setConnectionError(null);
   }, []);
+
+  // Auto-dismiss the error banner after 10 seconds so it doesn't
+  // persist indefinitely if the user ignores it.
+  const errorTimerRef = useRef<ReturnType<typeof setTimeout>>();
+
+  useEffect(() => {
+    if (connectionError) {
+      errorTimerRef.current = setTimeout(() => {
+        setConnectionError(null);
+      }, 10_000);
+    }
+    return () => clearTimeout(errorTimerRef.current);
+  }, [connectionError]);
 
   const handleDisconnectWallet = useCallback(() => {
     disconnectWallet();
