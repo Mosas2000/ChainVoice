@@ -11,6 +11,7 @@ import { CharacterCounter } from '@/components/ui/character-counter';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import { LIMITS } from '@/config/limits';
 import { validateUsername, isAscii } from '@/lib/validateUsername';
+import { validateAvatarUrl } from '@/lib/validateUrl';
 import type { Profile } from '@/types';
 
 interface ProfileFormProps {
@@ -28,6 +29,7 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
   const [error, setError] = useState<string | null>(null);
 
   const usernameValidation = useMemo(() => validateUsername(username), [username]);
+  const avatarUrlValidation = useMemo(() => validateAvatarUrl(avatarUrl), [avatarUrl]);
 
   useEffect(() => {
     if (existingProfile) {
@@ -59,13 +61,8 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
       return;
     }
 
-    if (avatarUrl.length > LIMITS.avatarUrl.max) {
-      setError(`Avatar URL must be ${LIMITS.avatarUrl.max} characters or fewer`);
-      return;
-    }
-
-    if (avatarUrl.length > 0 && !isAscii(avatarUrl)) {
-      setError('Avatar URL must contain only ASCII characters (the contract uses string-ascii)');
+    if (avatarUrl.length > 0 && !avatarUrlValidation.valid) {
+      setError(avatarUrlValidation.error || 'Invalid avatar URL');
       return;
     }
 
@@ -198,7 +195,7 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
             <label htmlFor="avatarUrl" className="block text-sm font-medium mb-1">
               Avatar URL
               <span className="text-xs text-muted-foreground font-normal ml-2">
-                ASCII characters only · max {LIMITS.avatarUrl.max}
+                https:// only · max {LIMITS.avatarUrl.max}
               </span>
             </label>
             <Input
@@ -208,9 +205,24 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
               placeholder="https://..."
               type="url"
               maxLength={LIMITS.avatarUrl.max}
-              className={avatarUrl.length > LIMITS.avatarUrl.max ? 'border-destructive' : ''}
+              aria-invalid={!!avatarUrlValidation.error}
+              aria-describedby="avatar-url-feedback"
+              className={avatarUrlValidation.error ? 'border-destructive' : ''}
             />
-            <div className="flex justify-end mt-1">
+            <div className="flex items-center justify-between mt-1">
+              <div id="avatar-url-feedback">
+                {avatarUrlValidation.error ? (
+                  <p className="text-xs text-destructive flex items-center gap-1">
+                    <XCircle className="h-3 w-3" />
+                    {avatarUrlValidation.error}
+                  </p>
+                ) : avatarUrl.length > 0 ? (
+                  <p className="text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
+                    <CheckCircle2 className="h-3 w-3" />
+                    Valid URL
+                  </p>
+                ) : null}
+              </div>
               <CharacterCounter current={avatarUrl.length} max={LIMITS.avatarUrl.max} />
             </div>
           </div>
@@ -227,7 +239,7 @@ export function ProfileForm({ existingProfile, onSuccess }: ProfileFormProps) {
               loading ||
               !usernameValidation.valid ||
               bio.length > LIMITS.bio.max ||
-              avatarUrl.length > LIMITS.avatarUrl.max
+              !avatarUrlValidation.valid
             }
             className="w-full"
           >
