@@ -47,5 +47,9 @@ export const getUserAddress = (): string | null => {
 };
 
 export const isAuthenticated = (): boolean => {
-  return userSession.isUserSignedIn();
+  try {
+    return userSession.isUserSignedIn();
+  } catch {
+    return false;
+  }
 };
