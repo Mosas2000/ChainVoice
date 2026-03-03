@@ -157,7 +157,7 @@ export function Profile() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="messages" className="mt-6">
-            <MessageFeed authorAddress={userAddress || undefined} limit={50} />
+            <MessageFeed authorAddress={userAddress || undefined} limit={50} pollInterval={null} />
           </TabsContent>
           <TabsContent value="followers" className="mt-6">
             <Card>
