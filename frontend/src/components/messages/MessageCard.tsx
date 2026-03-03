@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Timestamp } from '@/components/ui/timestamp';
 import type { Message } from '@/types';
 import { Heart, MessageCircle, User, Lock, Globe } from 'lucide-react';
 
@@ -54,23 +55,6 @@ export function MessageCard({
     }
   };
 
-  const formatDate = (timestamp: number) => {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-
-    if (diffInSeconds < 60) return 'just now';
-    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
-    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
-    if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d ago`;
-
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
-    });
-  };
-
   const formatAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
@@ -103,12 +87,7 @@ export function MessageCard({
               <div>
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-sm">{displayName}</span>
-                  <time
-                    dateTime={new Date(message.timestamp).toISOString()}
-                    className="text-xs text-muted-foreground"
-                  >
-                    {formatDate(message.timestamp)}
-                  </time>
+                  <Timestamp value={message.timestamp} format="relative" showBlockHeight />
                 </div>
                 <div className="text-xs text-muted-foreground">
                   {formatAddress(message.author)}
