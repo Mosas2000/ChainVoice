@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useState,
   type ReactNode,
 } from 'react';
@@ -46,6 +47,28 @@ function generateLocalId(): string {
   return `opt_${Date.now()}_${++nextId}`;
 }
 
+// ── Session storage persistence ──────────────────
+
+const STORAGE_KEY_MESSAGES = 'chainvoice:optimistic:messages';
+const STORAGE_KEY_FOLLOWS = 'chainvoice:optimistic:follows';
+
+function loadFromStorage<T>(key: string): T[] {
+  try {
+    const raw = sessionStorage.getItem(key);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveToStorage<T>(key: string, data: T[]): void {
+  try {
+    sessionStorage.setItem(key, JSON.stringify(data));
+  } catch {
+    // Quota exceeded or private browsing — silently ignore.
+  }
+}
+
 // ────────────────────────────────────────────────
 // Provider
 // ────────────────────────────────────────────────
@@ -55,8 +78,21 @@ interface OptimisticProviderProps {
 }
 
 export function OptimisticProvider({ children }: OptimisticProviderProps) {
-  const [messages, setMessages] = useState<OptimisticMessage[]>([]);
-  const [follows, setFollows] = useState<OptimisticFollow[]>([]);
+  const [messages, setMessages] = useState<OptimisticMessage[]>(
+    () => loadFromStorage<OptimisticMessage>(STORAGE_KEY_MESSAGES),
+  );
+  const [follows, setFollows] = useState<OptimisticFollow[]>(
+    () => loadFromStorage<OptimisticFollow>(STORAGE_KEY_FOLLOWS),
+  );
+
+  // Persist to sessionStorage whenever entries change.
+  useEffect(() => {
+    saveToStorage(STORAGE_KEY_MESSAGES, messages);
+  }, [messages]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEY_FOLLOWS, follows);
+  }, [follows]);
 
   const addMessage = useCallback(
     (entry: Omit<OptimisticMessage, 'localId' | 'createdAt' | 'status'>) => {
