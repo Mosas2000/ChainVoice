@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { TransactionProvider } from '@/contexts/TransactionContext';
+import { OptimisticProvider } from '@/contexts/OptimisticContext';
 import { ToastProvider } from '@/contexts/ToastContext';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Header } from '@/components/layout/Header';
@@ -23,6 +24,7 @@ function App() {
           <Router>
             <AuthProvider>
               <TransactionProvider>
+              <OptimisticProvider>
                 <div className="min-h-screen bg-background">
                   <Header />
                   <Routes>
@@ -37,6 +39,7 @@ function App() {
                 </div>
                 <ToastContainer />
                 <TransactionToastBridge />
+              </OptimisticProvider>
               </TransactionProvider>
             </AuthProvider>
           </Router>
