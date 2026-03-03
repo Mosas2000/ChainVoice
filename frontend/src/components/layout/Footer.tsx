@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { MessageSquare } from 'lucide-react';
 import { ExternalLink } from '@/components/ui/external-link';
 import { EXTERNAL_LINKS } from '@/config/links';
 
@@ -13,7 +12,7 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-3 col-span-2 md:col-span-1">
             <div className="flex items-center gap-2">
-              <MessageSquare className="h-5 w-5 text-primary" />
+              <img src="/favicon.svg" alt="" className="h-5 w-5" aria-hidden="true" />
               <span className="font-semibold">ChainVoice</span>
             </div>
             <p className="text-sm text-muted-foreground">
