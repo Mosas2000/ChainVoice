@@ -47,6 +47,13 @@ export const useMessages = (limit: number = 20, authorAddress?: string) => {
     fetchMessages();
   }, [fetchMessages]);
 
+  // Re-fetch whenever the consumer changes the pagination or filter params.
+  // Because fetchMessages is now stable, we trigger manually here.
+  useEffect(() => {
+    fetchMessages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [limit, authorAddress, page]);
+
   return {
     messages,
     loading,
