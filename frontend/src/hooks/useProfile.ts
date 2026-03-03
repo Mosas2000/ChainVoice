@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getProfile, getUserStats } from '@/services/profiles';
+import { getContractErrorMessage } from '@/lib/contractErrors';
 import type { Profile, UserStats } from '@/types';
 
 export function useProfile(userAddress?: string) {
@@ -27,7 +28,7 @@ export function useProfile(userAddress?: string) {
         setStats(statsData);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch profile');
+      setError(getContractErrorMessage(err));
     } finally {
       setLoading(false);
     }
