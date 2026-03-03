@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useLockBodyScroll } from '@/hooks/useLockBodyScroll';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
-import { MessageSquare, Home, Rss, User, LogOut, Wallet, Loader2 } from 'lucide-react';
+import { MessageSquare, Home, Rss, User, LogOut, Wallet, Loader2, AlertCircle } from 'lucide-react';
 
 interface MobileNavProps {
   open: boolean;
@@ -22,7 +22,7 @@ const NAV_LINKS = [
 export function MobileNav({ open, onClose }: MobileNavProps) {
   const drawerRef = useRef<HTMLDivElement>(null);
   const { pathname } = useLocation();
-  const { isAuthenticated, userAddress, connecting, connectWallet, disconnectWallet } = useAuth();
+  const { isAuthenticated, userAddress, connecting, connectionError, connectWallet, disconnectWallet } = useAuth();
 
   // Lock body scroll while drawer is visible
   useLockBodyScroll(open);
@@ -109,6 +109,12 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
 
           {/* Footer / wallet area */}
           <div className="border-t p-4 space-y-3">
+            {connectionError && (
+              <div role="alert" className="flex items-start gap-2 rounded-md bg-destructive/10 p-2 text-xs text-destructive">
+                <AlertCircle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+                <p>{connectionError}</p>
+              </div>
+            )}
             {isAuthenticated && userAddress ? (
               <>
                 <div className="flex items-center gap-2 px-1">
