@@ -22,7 +22,7 @@ const NAV_LINKS = [
 export function MobileNav({ open, onClose }: MobileNavProps) {
   const drawerRef = useRef<HTMLDivElement>(null);
   const { pathname } = useLocation();
-  const { isAuthenticated, userAddress, connecting, connectWallet, disconnectWallet } = useAuth();
+  const { isAuthenticated, userAddress, connecting, connectionError, connectWallet, disconnectWallet, clearConnectionError } = useAuth();
 
   // Lock body scroll while drawer is visible
   useLockBodyScroll(open);
@@ -132,23 +132,41 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
                 </Button>
               </>
             ) : (
-              <Button
-                onClick={() => {
-                  connectWallet();
-                  onClose();
-                }}
-                size="sm"
-                className="w-full"
-                disabled={connecting}
-                aria-label="Connect your Stacks wallet"
-              >
-                {connecting ? (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                ) : (
-                  <Wallet className="h-4 w-4 mr-2" />
+              <>
+                {connectionError && (
+                  <div
+                    role="alert"
+                    className="bg-destructive/15 text-destructive text-xs p-2 rounded-md flex items-center justify-between"
+                  >
+                    <span>{connectionError}</span>
+                    <button
+                      type="button"
+                      onClick={clearConnectionError}
+                      className="shrink-0 hover:opacity-70 ml-2"
+                      aria-label="Dismiss"
+                    >
+                      ✕
+                    </button>
+                  </div>
                 )}
-                {connecting ? 'Connecting…' : 'Connect Wallet'}
-              </Button>
+                <Button
+                  onClick={() => {
+                    connectWallet();
+                    onClose();
+                  }}
+                  size="sm"
+                  className="w-full"
+                  disabled={connecting}
+                  aria-label="Connect your Stacks wallet"
+                >
+                  {connecting ? (
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  ) : (
+                    <Wallet className="h-4 w-4 mr-2" />
+                  )}
+                  {connecting ? 'Connecting…' : 'Connect Wallet'}
+                </Button>
+              </>
             )}
           </div>
         </div>
