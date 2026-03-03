@@ -15,6 +15,7 @@ import { CharacterCounter } from '@/components/ui/character-counter';
 import { Globe, Lock } from 'lucide-react';
 import { LIMITS } from '@/config/limits';
 import { validateStxAddress } from '@/lib/validateAddress';
+import { FieldError } from '@/components/ui/field-error';
 
 interface MessageComposerProps {
   onSuccess?: () => void;
@@ -182,11 +183,7 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
                 aria-describedby="recipient-feedback"
                 className={recipientValidation.error ? 'border-destructive' : recipientAddress ? 'bg-muted' : ''}
               />
-              {recipientValidation.error && (
-                <p id="recipient-feedback" className="text-xs text-destructive mt-1">
-                  {recipientValidation.error}
-                </p>
-              )}
+              <FieldError message={recipientValidation.error} id="recipient-feedback" />
             </div>
           )}
 
