@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import { CharacterCounter } from '@/components/ui/character-counter';
 import { Globe, Lock } from 'lucide-react';
 import { LIMITS } from '@/config/limits';
+import { getContractErrorMessage } from '@/lib/contractErrors';
 
 interface MessageComposerProps {
   onSuccess?: () => void;
@@ -99,7 +100,7 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
         }
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to send message');
+      setError(getContractErrorMessage(err));
     } finally {
       setLoading(false);
     }
