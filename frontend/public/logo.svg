@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="#6D28D9"/>
+
+  <!-- Speech bubble -->
+  <path
+    d="M128 160 C128 132 150 112 178 112 L334 112 C362 112 384 132 384 160
+       L384 280 C384 308 362 328 334 328 L260 328 L200 376 L210 328 L178 328
+       C150 328 128 308 128 280 Z"
+    fill="white"
+  />
+
+  <!-- Chain links — two interlocking rounded rectangles -->
+  <g stroke="#6D28D9" stroke-width="14" stroke-linecap="round" fill="none">
+    <!-- Left link -->
+    <rect x="192" y="185" width="60" height="80" rx="22"/>
+    <!-- Right link -->
+    <rect x="260" y="175" width="60" height="80" rx="22"/>
+  </g>
+</svg>
