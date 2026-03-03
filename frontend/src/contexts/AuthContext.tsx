@@ -1,9 +1,11 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import { userSession, isAuthenticated, getUserAddress, connectWallet, disconnectWallet } from '../services/auth';
 
 interface AuthContextType {
   isAuthenticated: boolean;
   userAddress: string | null;
+  connecting: boolean;
+  connectionError: string | null;
   checkAuth: () => void;
   connectWallet: () => Promise<void>;
   disconnectWallet: () => void;
@@ -14,8 +16,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [authenticated, setAuthenticated] = useState(false);
   const [userAddress, setUserAddress] = useState<string | null>(null);
+  const [connecting, setConnecting] = useState(false);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
 
-  const checkAuth = () => {
+  const checkAuth = useCallback(() => {
     const auth = isAuthenticated();
     setAuthenticated(auth);
     if (auth) {
@@ -23,21 +27,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } else {
       setUserAddress(null);
     }
-  };
+  }, []);
 
-  const handleConnectWallet = async () => {
+  const handleConnectWallet = useCallback(async () => {
+    setConnecting(true);
+    setConnectionError(null);
     try {
       await connectWallet();
       checkAuth();
     } catch (error) {
-      console.error('Failed to connect wallet:', error);
+      const message = error instanceof Error ? error.message : 'Failed to connect wallet';
+      setConnectionError(message);
+      console.error('Wallet connection failed:', message);
+    } finally {
+      setConnecting(false);
     }
-  };
+  }, [checkAuth]);
 
-  const handleDisconnectWallet = () => {
+  const handleDisconnectWallet = useCallback(() => {
     disconnectWallet();
     checkAuth();
-  };
+  }, [checkAuth]);
 
   useEffect(() => {
     if (userSession.isSignInPending()) {
@@ -52,7 +62,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   return (
     <AuthContext.Provider value={{ 
       isAuthenticated: authenticated, 
-      userAddress, 
+      userAddress,
+      connecting,
+      connectionError,
       checkAuth,
       connectWallet: handleConnectWallet,
       disconnectWallet: handleDisconnectWallet
