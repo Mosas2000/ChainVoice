@@ -10,7 +10,6 @@ import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { MobileNav } from '@/components/layout/MobileNav';
 import { HamburgerIcon } from '@/components/layout/HamburgerIcon';
 import { Button } from '@/components/ui/button';
-import { MessageSquare } from 'lucide-react';
 
 export function Header() {
   const { isAuthenticated, userAddress, connectWallet, disconnectWallet } = useAuth();
@@ -49,7 +48,7 @@ export function Header() {
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-6">
             <Link to="/" className="flex items-center gap-2" aria-label="ChainVoice home">
-              <MessageSquare className="h-6 w-6 text-primary" />
+              <img src="/favicon.svg" alt="" className="h-6 w-6" aria-hidden="true" />
               <span className="text-xl font-semibold">ChainVoice</span>
             </Link>
 
