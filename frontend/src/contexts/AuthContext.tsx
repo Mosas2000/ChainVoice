@@ -6,6 +6,7 @@ interface AuthContextType {
   userAddress: string | null;
   connecting: boolean;
   connectionError: string | null;
+  clearConnectionError: () => void;
   checkAuth: () => void;
   connectWallet: () => Promise<void>;
   disconnectWallet: () => void;
@@ -44,6 +45,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [checkAuth]);
 
+  const clearConnectionError = useCallback(() => {
+    setConnectionError(null);
+  }, []);
+
   const handleDisconnectWallet = useCallback(() => {
     disconnectWallet();
     checkAuth();
@@ -65,6 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       userAddress,
       connecting,
       connectionError,
+      clearConnectionError,
       checkAuth,
       connectWallet: handleConnectWallet,
       disconnectWallet: handleDisconnectWallet
