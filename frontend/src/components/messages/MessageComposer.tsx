@@ -15,6 +15,7 @@ import { CharacterCounter } from '@/components/ui/character-counter';
 import { Globe, Lock } from 'lucide-react';
 import { LIMITS } from '@/config/limits';
 import { getContractErrorMessage } from '@/lib/contractErrors';
+import { ErrorAlert } from '@/components/ui/error-alert';
 
 interface MessageComposerProps {
   onSuccess?: () => void;
@@ -204,9 +205,7 @@ export function MessageComposer({ onSuccess, recipientAddress, recipientName }: 
           </div>
 
           {error && (
-            <div role="alert" className="bg-destructive/15 text-destructive text-sm p-3 rounded-md">
-              {error}
-            </div>
+            <ErrorAlert message={error} onDismiss={() => setError(null)} />
           )}
 
           <Button type="submit" disabled={loading || content.length === 0 || content.length > maxLength} className="w-full">
