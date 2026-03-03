@@ -3,7 +3,7 @@ import { MessageCard } from './MessageCard';
 import { MessageFeedSkeleton } from '@/components/skeletons';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, MessageSquare } from 'lucide-react';
 
 function formatUpdatedAgo(ts: number | null): string | null {
   if (!ts) return null;
@@ -49,6 +49,7 @@ export function MessageFeed({ limit = 20, authorAddress }: MessageFeedProps) {
       <Card>
         <CardContent className="py-12">
           <div className="text-center space-y-3">
+            <MessageSquare className="h-10 w-10 mx-auto text-muted-foreground/40" aria-hidden="true" />
             <p className="text-sm text-muted-foreground">
               {authorAddress ? 'This user hasn\'t posted any messages yet' : 'No messages yet'}
             </p>
