@@ -10,10 +10,10 @@ import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { MobileNav } from '@/components/layout/MobileNav';
 import { HamburgerIcon } from '@/components/layout/HamburgerIcon';
 import { Button } from '@/components/ui/button';
-import { MessageSquare, Loader2 } from 'lucide-react';
+import { MessageSquare, Loader2, X } from 'lucide-react';
 
 export function Header() {
-  const { isAuthenticated, userAddress, connecting, connectWallet, disconnectWallet } = useAuth();
+  const { isAuthenticated, userAddress, connecting, connectionError, connectWallet, disconnectWallet, clearConnectionError } = useAuth();
   const { pendingCount } = useTransactions();
   const isDesktop = useMediaQuery(BREAKPOINTS.md);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -145,6 +145,23 @@ export function Header() {
           </div>
         </div>
       </header>
+
+      {/* Connection error banner */}
+      {connectionError && (
+        <div role="alert" className="border-b bg-destructive/10 text-destructive">
+          <div className="container flex items-center justify-between py-2 text-sm">
+            <span>{connectionError}</span>
+            <button
+              type="button"
+              onClick={clearConnectionError}
+              className="shrink-0 hover:opacity-70 ml-4"
+              aria-label="Dismiss connection error"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Mobile navigation drawer — rendered outside header for overlay stacking */}
       {!isDesktop && <MobileNav open={mobileMenuOpen} onClose={closeMobileMenu} />}
