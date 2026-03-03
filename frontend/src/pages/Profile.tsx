@@ -6,15 +6,22 @@ import { ProfileForm } from '@/components/profile/ProfileForm';
 import { ProfileCard } from '@/components/profile/ProfileCard';
 import { ProfilePageSkeleton } from '@/components/skeletons';
 import { MessageFeed } from '@/components/messages/MessageFeed';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { User } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { WalletConnectionGuard } from '@/components/layout/WalletConnectionGuard';
 import type { UserStats, FollowInfo } from '@/types';
 
 export function Profile() {
-  const { isAuthenticated, userAddress } = useAuth();
+  return (
+    <WalletConnectionGuard message="Connect your wallet to view and manage your profile">
+      <ProfileContent />
+    </WalletConnectionGuard>
+  );
+}
+
+function ProfileContent() {
+  const { userAddress } = useAuth();
   const { profile, loading: profileLoading, error: profileError, refetch } = useProfile(userAddress || undefined);
   const [stats, setStats] = useState<UserStats | null>(null);
   const [followInfo, setFollowInfo] = useState<FollowInfo | null>(null);
@@ -53,27 +60,6 @@ export function Profile() {
     refetch();
     loadStats();
   };
-
-  if (!isAuthenticated) {
-    return (
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <Card>
-          <CardHeader className="text-center">
-            <User className="h-12 w-12 mx-auto mb-4 text-primary" />
-            <CardTitle>Profile</CardTitle>
-            <CardDescription>
-              Connect your wallet to view and manage your profile
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-center">
-            <Link to="/">
-              <Button>Go to Home</Button>
-            </Link>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   if (profileLoading || statsLoading) {
     return <ProfilePageSkeleton />;
