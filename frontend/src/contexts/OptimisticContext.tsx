@@ -48,6 +48,8 @@ interface OptimisticStore {
   removeEntry: (txId: string) => void;
   /** Check if there is a pending follow/unfollow for a given address. */
   getOptimisticFollow: (targetAddress: string) => OptimisticFollow | undefined;
+  /** Remove all entries and clear persisted storage. */
+  clearAll: () => void;
 }
 
 const OptimisticContext = createContext<OptimisticStore | null>(null);
@@ -182,6 +184,17 @@ export function OptimisticProvider({ children }: OptimisticProviderProps) {
     [follows],
   );
 
+  const clearAll = useCallback(() => {
+    setMessages([]);
+    setFollows([]);
+    try {
+      sessionStorage.removeItem(STORAGE_KEY_MESSAGES);
+      sessionStorage.removeItem(STORAGE_KEY_FOLLOWS);
+    } catch {
+      // Ignore storage errors.
+    }
+  }, []);
+
   return (
     <OptimisticContext.Provider
       value={{
@@ -193,6 +206,7 @@ export function OptimisticProvider({ children }: OptimisticProviderProps) {
         failEntry,
         removeEntry,
         getOptimisticFollow,
+        clearAll,
       }}
     >
       {children}
