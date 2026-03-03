@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { formatTimestamp, toISOString } from '@/lib/formatTimestamp';
+import { formatTimestamp, toISOString } from '@/lib/timestamp';
 import { BlockHeightBadge } from '@/components/ui/block-height-badge';
 import { useInterval } from '@/hooks/useInterval';
 
@@ -52,7 +52,7 @@ export function Timestamp({
   const longText = formatTimestamp(value, { format: 'long' });
 
   return (
-    <span className={`inline-flex items-center gap-1.5 ${className}`}>
+    <span className={`inline-flex items-center gap-1.5 ${className}`} role="group" aria-label={longText}>
       <time dateTime={isoString} title={longText} className="text-xs text-muted-foreground">
         {displayText}
       </time>

@@ -1,5 +1,5 @@
 import { Blocks } from 'lucide-react';
-import { isBlockHeight } from '@/lib/blockTime';
+import { isBlockHeight } from '@/lib/timestamp';
 
 interface BlockHeightBadgeProps {
   /** Raw value from the contract — either a block height or a stub timestamp */
@@ -23,8 +23,9 @@ export function BlockHeightBadge({ value, className = '' }: BlockHeightBadgeProp
     <span
       className={`inline-flex items-center gap-1 text-[10px] text-muted-foreground font-mono ${className}`}
       title={`Bitcoin block #${value.toLocaleString()}`}
+      aria-label={`Block number ${value.toLocaleString()}`}
     >
-      <Blocks className="h-3 w-3" />
+      <Blocks className="h-3 w-3" aria-hidden="true" />
       #{value.toLocaleString()}
     </span>
   );
