@@ -197,3 +197,16 @@ export function useOptimistic(): OptimisticStore {
   }
   return ctx;
 }
+
+/**
+ * Convenience hook that returns the count of currently pending
+ * optimistic entries (messages + follows that have not yet confirmed
+ * or failed).
+ */
+export function useOptimisticPendingCount(): number {
+  const { messages, follows } = useOptimistic();
+  return (
+    messages.filter((m) => m.status === 'pending').length +
+    follows.filter((f) => f.status === 'pending').length
+  );
+}
