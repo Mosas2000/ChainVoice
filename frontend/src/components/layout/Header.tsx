@@ -10,10 +10,10 @@ import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { MobileNav } from '@/components/layout/MobileNav';
 import { HamburgerIcon } from '@/components/layout/HamburgerIcon';
 import { Button } from '@/components/ui/button';
-import { MessageSquare } from 'lucide-react';
+import { MessageSquare, Loader2 } from 'lucide-react';
 
 export function Header() {
-  const { isAuthenticated, userAddress, connectWallet, disconnectWallet } = useAuth();
+  const { isAuthenticated, userAddress, connecting, connectWallet, disconnectWallet } = useAuth();
   const { pendingCount } = useTransactions();
   const isDesktop = useMediaQuery(BREAKPOINTS.md);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -115,8 +115,14 @@ export function Header() {
                     </Button>
                   </div>
                 ) : (
-                  <Button onClick={connectWallet} size="sm" aria-label="Connect your Stacks wallet">
-                    Connect Wallet
+                  <Button
+                    onClick={connectWallet}
+                    size="sm"
+                    disabled={connecting}
+                    aria-label="Connect your Stacks wallet"
+                  >
+                    {connecting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                    {connecting ? 'Connecting…' : 'Connect Wallet'}
                   </Button>
                 )}
               </>
