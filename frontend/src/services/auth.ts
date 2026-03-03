@@ -4,14 +4,23 @@ import { APP_DETAILS } from '../config/contracts';
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig });
 
-export const connectWallet = () => {
-  showConnect({
-    appDetails: APP_DETAILS,
-    redirectTo: '/',
-    onFinish: () => {
-      window.location.reload();
-    },
-    userSession,
+export const connectWallet = (): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    try {
+      showConnect({
+        appDetails: APP_DETAILS,
+        redirectTo: '/',
+        onFinish: () => {
+          resolve();
+        },
+        onCancel: () => {
+          reject(new Error('Wallet connection was cancelled by the user'));
+        },
+        userSession,
+      });
+    } catch (err) {
+      reject(err instanceof Error ? err : new Error('Failed to open wallet connection'));
+    }
   });
 };
 
